@@ -1,0 +1,64 @@
+version: "3.8"
+
+services:
+  namada-1:
+    restart: unless-stopped
+    hostname: namada-1
+    image: cerc/namada:local
+    entrypoint: ["sh", "/docker-entrypoint-scripts.d/start-node.sh"]
+    volumes:
+      - ../config/local-namada/start-node.sh:/docker-entrypoint-scripts.d/start-node.sh
+  # chain data location; change this to an appropriate location on your system
+      - /home/campfire/chaindata/namada-1:/root/.local/share/namada
+      - namada-shared:/root/.namada-shared
+      - ../config/local-namada/genesis:/genesis:ro
+      - ../config/local-namada/make_balances.py:/scripts/make_balances.py
+      - /usr/share/nginx/html:/output
+      - ../config/local-namada/index.html:/index.html
+    environment:
+      # - CHAIN_ID=$CHAIN_ID
+      - P2P_PORT=${P2P_PORT}
+      - EXTIP=${EXTIP}
+      - SERVE_PORT=${SERVE_PORT}
+      - NAMADA_TAG=${NAMADA_TAG}
+    ports:
+      - "${P2P_PORT}:26656" # p2p
+      - "26657" # http rpc
+      - "8082:8123" # configs server
+
+  namada-2:
+    restart: unless-stopped
+    hostname: namada-2
+    image: cerc/namada:local
+    entrypoint: ["sh", "/docker-entrypoint-scripts.d/start-node.sh"]
+    volumes:
+      - ../config/local-namada/start-node.sh:/docker-entrypoint-scripts.d/start-node.sh
+  # chain data location; change this to an appropriate location on your system
+      - /home/campfire/chaindata/namada-2:/root/.local/share/namada
+      - namada-shared:/root/.namada-shared
+    # environment:
+    #   - CHAIN_ID=$CHAIN_ID
+    ports:
+      - "26656" # p2p
+      - "26657" # http rpc
+
+  namada-3:
+    restart: unless-stopped
+    hostname: namada-3
+    image: cerc/namada:local
+    entrypoint: ["sh", "/docker-entrypoint-scripts.d/start-node.sh"]
+    volumes:
+      - ../config/local-namada/start-node.sh:/docker-entrypoint-scripts.d/start-node.sh
+  # chain data location; change this to an appropriate location on your system
+      - /home/campfire/chaindata/namada-3:/root/.local/share/namada
+      - namada-shared:/root/.namada-shared
+    # environment:
+    #   - CHAIN_ID=$CHAIN_ID
+    ports:
+      - "26656" # p2p
+      - "${RPC_PORT:-26657}:26657" # http rpc
+      - "26660:26660"
+
+volumes:
+  # shared 'network directory' for genesis txs etc that need to be shared between validators when generating genesis files
+  namada-shared:
