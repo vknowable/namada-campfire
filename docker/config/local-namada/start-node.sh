@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# uncomment this line for script debugging
+set -x
+
 # TODO: set chain-prefix by env var
 
 namada --version
@@ -109,7 +112,7 @@ if [ $(hostname) = "namada-1" ]; then
     INIT_OUTPUT=$(namadac utils init-network \
       --genesis-time "2023-11-13T00:00:00Z" \
       --wasm-checksums-path /wasm/checksums.json \
-      --chain-prefix luminara \
+      --chain-prefix $CHAIN_PREFIX \
       --templates-path /root/.namada-shared/genesis \
       --consensus-timeout-commit 10s)
 

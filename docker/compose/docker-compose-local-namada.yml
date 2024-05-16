@@ -4,12 +4,12 @@ services:
   namada-1:
     restart: unless-stopped
     hostname: namada-1
-    image: cerc/namada:local
+    image: namada:${NAMADA_TAG}
     entrypoint: ["sh", "/docker-entrypoint-scripts.d/start-node.sh"]
     volumes:
       - ../config/local-namada/start-node.sh:/docker-entrypoint-scripts.d/start-node.sh
   # chain data location; change this to an appropriate location on your system
-      - /home/campfire/chaindata/namada-1:/root/.local/share/namada
+      - /home/node/chaindata/namada-1:/root/.local/share/namada
       - namada-shared:/root/.namada-shared
       - ../config/local-namada/genesis:/genesis:ro
       - ../config/local-namada/make_balances.py:/scripts/make_balances.py
@@ -21,6 +21,7 @@ services:
       - EXTIP=${EXTIP}
       - SERVE_PORT=${SERVE_PORT}
       - NAMADA_TAG=${NAMADA_TAG}
+      - CHAIN_PREFIX=${CHAIN_PREFIX:luminara}
     ports:
       - "${P2P_PORT}:26656" # p2p
       - "26657" # http rpc
@@ -29,14 +30,15 @@ services:
   namada-2:
     restart: unless-stopped
     hostname: namada-2
-    image: cerc/namada:local
+    image: namada:${NAMADA_TAG}
     entrypoint: ["sh", "/docker-entrypoint-scripts.d/start-node.sh"]
     volumes:
       - ../config/local-namada/start-node.sh:/docker-entrypoint-scripts.d/start-node.sh
   # chain data location; change this to an appropriate location on your system
-      - /home/campfire/chaindata/namada-2:/root/.local/share/namada
+      - /home/node/chaindata/namada-2:/root/.local/share/namada
       - namada-shared:/root/.namada-shared
-    # environment:
+    environment:
+    - CHAIN_PREFIX=${CHAIN_PREFIX:luminara}
     #   - CHAIN_ID=$CHAIN_ID
     ports:
       - "26656" # p2p
@@ -45,14 +47,15 @@ services:
   namada-3:
     restart: unless-stopped
     hostname: namada-3
-    image: cerc/namada:local
+    image: namada:${NAMADA_TAG}
     entrypoint: ["sh", "/docker-entrypoint-scripts.d/start-node.sh"]
     volumes:
       - ../config/local-namada/start-node.sh:/docker-entrypoint-scripts.d/start-node.sh
   # chain data location; change this to an appropriate location on your system
-      - /home/campfire/chaindata/namada-3:/root/.local/share/namada
+      - /home/node/chaindata/namada-3:/root/.local/share/namada
       - namada-shared:/root/.namada-shared
-    # environment:
+    environment:
+    - CHAIN_PREFIX=${CHAIN_PREFIX:luminara}
     #   - CHAIN_ID=$CHAIN_ID
     ports:
       - "26656" # p2p
