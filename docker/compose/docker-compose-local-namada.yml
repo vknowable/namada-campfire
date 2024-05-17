@@ -16,12 +16,12 @@ services:
       - /usr/share/nginx/html:/output
       - ../config/local-namada/index.html:/index.html
     environment:
-      # - CHAIN_ID=$CHAIN_ID
       - P2P_PORT=${P2P_PORT}
       - EXTIP=${EXTIP}
       - SERVE_PORT=${SERVE_PORT}
       - NAMADA_TAG=${NAMADA_TAG}
       - CHAIN_PREFIX=${CHAIN_PREFIX:-luminara}
+      - DOMAIN=${DOMAIN:-knowable.run}
     ports:
       - "${P2P_PORT}:26656" # p2p
       - "26657" # http rpc
@@ -39,7 +39,7 @@ services:
       - namada-shared:/root/.namada-shared
     environment:
     - CHAIN_PREFIX=${CHAIN_PREFIX:-luminara}
-    #   - CHAIN_ID=$CHAIN_ID
+    - DOMAIN=${DOMAIN:-knowable.run}
     ports:
       - "26656" # p2p
       - "26657" # http rpc
@@ -56,7 +56,7 @@ services:
       - namada-shared:/root/.namada-shared
     environment:
     - CHAIN_PREFIX=${CHAIN_PREFIX:-luminara}
-    #   - CHAIN_ID=$CHAIN_ID
+    - DOMAIN=${DOMAIN:-knowable.run}
     ports:
       - "26656" # p2p
       - "${RPC_PORT:-26657}:26657" # http rpc

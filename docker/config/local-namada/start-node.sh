@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # uncomment this line for script debugging
-set -x
+# set -x
 
 # TODO: set chain-prefix by env var
 
@@ -173,7 +173,6 @@ echo "Advertising public ip $EXTIP"
   sed -i "s#external_address = \".*\"#external_address = \"$EXTIP:${P2P_PORT:-26656}\"#g" /root/.local/share/namada/$CHAIN_ID/config.toml
   ## modified for public facing nginx
   namada node ledger run-until --block-height 0 --halt
-  #NODE_ID=$(cometbft show-node-id --home ~/.local/share/namada/$CHAIN_ID/cometbft/)
   NODE_ID=$(cometbft show-node-id --home ~/.local/share/namada/$CHAIN_ID/cometbft/ | awk '{last_line = $0} END {print last_line}')
   rm -f /output/*.tar.gz
   cp /*.tar.gz /output
@@ -189,6 +188,8 @@ echo "Advertising public ip $EXTIP"
   cp /index.html /output/index.html
   sed -i "s/CHAIN_ID/$CHAIN_ID/g" /output/index.html
   sed -i "s/NAMADA_TAG/$NAMADA_TAG/g" /output/index.html
+  sed -i "s/DOMAIN/$DOMAIN/g" /output/index.html
+  sed -i "s/CHAIN_PREFIX/$CHAIN_PREFIX/g" /output/index.html
   tar -czvf /output/wasm.tar.gz /wasm
   ##
 fi
