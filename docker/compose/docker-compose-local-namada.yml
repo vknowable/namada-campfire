@@ -21,7 +21,7 @@ services:
       - EXTIP=${EXTIP}
       - SERVE_PORT=${SERVE_PORT}
       - NAMADA_TAG=${NAMADA_TAG}
-      - CHAIN_PREFIX=${CHAIN_PREFIX:luminara}
+      - CHAIN_PREFIX=${CHAIN_PREFIX:-luminara}
     ports:
       - "${P2P_PORT}:26656" # p2p
       - "26657" # http rpc
@@ -38,7 +38,7 @@ services:
       - /home/node/chaindata/namada-2:/root/.local/share/namada
       - namada-shared:/root/.namada-shared
     environment:
-    - CHAIN_PREFIX=${CHAIN_PREFIX:luminara}
+    - CHAIN_PREFIX=${CHAIN_PREFIX:-luminara}
     #   - CHAIN_ID=$CHAIN_ID
     ports:
       - "26656" # p2p
@@ -55,7 +55,7 @@ services:
       - /home/node/chaindata/namada-3:/root/.local/share/namada
       - namada-shared:/root/.namada-shared
     environment:
-    - CHAIN_PREFIX=${CHAIN_PREFIX:luminara}
+    - CHAIN_PREFIX=${CHAIN_PREFIX:-luminara}
     #   - CHAIN_ID=$CHAIN_ID
     ports:
       - "26656" # p2p

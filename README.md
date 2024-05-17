@@ -37,6 +37,8 @@ namada        v0.35.1   5cfbccd74f18   About an hour ago   573MB
 ```
 
 ### Starting the chain
+You can launch the chain by running the script `scripts/relaunch.sh`, or by following these steps:  
+
 1. Before starting, check the docker compose file `docker/compose/docker-compose-local-namada.yml` and make sure the paths for each volume point to a sensible location on your server. (Change them if needed).
 2. Start the chain using the compose file and the env file you created in the previous section:  
 ```
@@ -45,8 +47,7 @@ export NAMADA_TAG=v0.35.1
 docker compose -f ~/namada-campfire/docker/compose/docker-compose-local-namada.yml --env-file ~/campfire.env up -d
 ```
 3. After the chain has started, you can obtain the chain-id, faucet private-key and NAM token address (both found in the wallet.toml of the namada-1 node `~/chaindata/namada-1/$CHAIN_ID/wallet.toml`). You can now start the faucet backend:  
-`docker run --name faucet-be -d -p "5000:5000" faucet-be:local ./server --cargo-env devel
-opment --difficulty 3 --private-key $FAUCET_PK --chain-start 1 --chain-id $CHAIN_ID --port 5000 --rps 10  --rpc http://172.17.0.1:26657`  
+`docker run --name faucet-be -d -p "5000:5000" faucet-be:local ./server --cargo-env development --difficulty 3 --private-key $FAUCET_PK --chain-start 1 --chain-id $CHAIN_ID --port 5000 --rps 10  --rpc http://172.17.0.1:26657`  
 and frontend:  
 `docker run --name faucet-fe -d -p "4000:80" faucet-fe:local`  
 
@@ -65,7 +66,7 @@ namadac balance --owner test
 ```
 
 ### Upgrading the chain
-Follow these steps to stop the chain, wipe all chain data, and relaunch with a different version of Namada:  
+You can re-launch the chain by running the script `scripts/relaunch.sh`, or follow these steps to stop the chain, wipe all chain data, and re-launch with a different version of Namada:  
 
 1. Build the container image for the new version of Namada (this can be done while the old chain is still running, to minimize downtime). There shouldn't be any need to rebuild the faucet frontend or backend containers in most cases.
 2. Stop the chain: `docker compose -f ~/namada-campfire/docker/compose/docker-compose-local-namada.yml --env-file ~/campfire.env down --volumes`
