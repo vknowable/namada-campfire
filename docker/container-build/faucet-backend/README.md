@@ -1,6 +1,6 @@
 ## faucet-backend
 
-1. clone repo https://github.com/heliaxdev/namada-faucet.git
+1. this is modified from the base repo https://github.com/heliaxdev/namada-faucet.git
 2. the faucet was changed for the shielded-expedition incentivized testnet to check an api endpoint on a heliax server to see whether the requesting address was a registered shielded-expedition participant. The older versions are also not compatible with recent changes to the Namada Sdk. Therefore, we need to use this branch in a fork of the faucet that has been updated to work with Namada versions 0.35.1 and up:  
 ```
 git clone https://github.com/vknowable/namada-faucet.git
