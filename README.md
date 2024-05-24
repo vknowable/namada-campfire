@@ -1,7 +1,7 @@
 # Namada "Campfire" Testnet Hosting Resources
 
 ### Recommended Installs
-- (required) Docker/Compose (there is an install script in the `scripts` folder)
+- (required) Docker/Compose (there is an install script to install Docker and a few other misc dependencies in the `scripts` folder). If you are a non-root user, you will want to add yourself to the 'docker' group so that you can run docker commands without sudo (to ensure scripts work as intended without stopping to prompt for a password)
 - Nginx to proxy to landing page, rpc, faucet etc (example nginx config in `config` folder)
 - LetsEncrypt/Certbot for SSL certificates
 - Any other general security practices (eg: Fail2Ban, SSH 2fa)

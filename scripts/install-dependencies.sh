@@ -44,7 +44,7 @@ echo "**************************************************************************
 sudo apt -y update
 
 # install misc dependencies
-sudo apt -y install jq git curl ca-certificates gnupg
+sudo apt -y install jq git curl ca-certificates gnupg lz4
 
 # Add dockerco package repository
 sudo mkdir -m 0755 -p /etc/apt/keyrings
