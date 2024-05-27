@@ -8,7 +8,8 @@
 
 ### Prep
 1. Provision a domain name -- we'll use knowable.run as an example. Setup your DNS records to point to your server, along with any corresponding subdomains. For a setup that includes chain, landing page, rpc, and faucet we can setup these records:  
-`knowable.run testnet.knowable.run faucet.knowable.run api.faucet.knowable.run rpc.knowable.run`
+`knowable.run testnet.knowable.run faucet.knowable.run api.faucet.knowable.run rpc.knowable.run`  
+This scheme can be extended to add additional subdomains for other components (for example `interface.knowable.run` etc.)
 2. Clone this repo onto your server.
 3. Install some dependencies:  
 Docker/Compose: `scripts/install-docker.sh`  
@@ -21,11 +22,7 @@ Successfully received certificate.
 Certificate is saved at: /etc/letsencrypt/live/knowable.run/fullchain.pem
 Key is saved at:         /etc/letsencrypt/live/knowable.run/privkey.pem
 ```
-5. Replace the default nginx config at `/etc/nginx/sites-enabled/default` with the contents of `config/nginx.conf` (modifying paths, domain names, ports etc as needed). Be sure to restart the nginx service after changing the config.  
-`/etc/nginx/sites-enabled/default`:
-```
-config here
-```
+5. Replace the default nginx config at `/etc/nginx/sites-enabled/default` with the contents of `config/nginx.conf` (modifying paths, domain names, ports etc as needed). Be sure to restart the nginx service after changing the config.
 6. Create a textfile (in any location you like) for the env variables used to configure the Campfire chain, following the example in `config/campfire.env`
 7. Build the containers for Namada, Faucet-frontend and Faucet-backend following the instructions in `docker/container-build` directory. Verify the images were built correctly:
 ```
