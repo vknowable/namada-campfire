@@ -191,7 +191,7 @@ if [ ! -d "/root/.local/share/namada/$CHAIN_ID/db" ] || [ -z "$(ls -A /root/.loc
     PEERS="\"tcp://$NODE_ID@${EXTIP}:${P2P_PORT:-26656}\""
     echo "CHAIN_ID=$CHAIN_ID" > /$ENV_FILENAME
     echo "#EXTIP=" >> /$ENV_FILENAME
-    echo "CONFIGS_SERVER=https://testnet.luminara.icu/configs" >> /$ENV_FILENAME
+    echo "CONFIGS_SERVER=https://testnet.$DOMAIN/configs" >> /$ENV_FILENAME
     echo "PERSISTENT_PEERS=$PEERS" >> /$ENV_FILENAME
     rm -f /output/$ENV_FILENAME
     cp /$ENV_FILENAME /output/$ENV_FILENAME
@@ -200,12 +200,13 @@ if [ ! -d "/root/.local/share/namada/$CHAIN_ID/db" ] || [ -z "$(ls -A /root/.loc
     sed -i "s/NAMADA_TAG/$NAMADA_TAG/g" /output/index.html
     sed -i "s/DOMAIN/$DOMAIN/g" /output/index.html
     sed -i "s/CHAIN_PREFIX/$CHAIN_PREFIX/g" /output/index.html
+    sed -i "s#PEER#$PEERS#g" /output/index.html
     tar -czvf /output/wasm.tar.gz /wasm
     ##
   fi
 
   # allow rpc connections on namada-3 node
-  if [ $(hostname) = "namada-3" ]; then
+  if [ $(hostname) = "namada-2" ]; then
     sed -i "s#laddr = \"tcp://.*:26657\"#laddr = \"tcp://0.0.0.0:26657\"#g" /root/.local/share/namada/$CHAIN_ID/config.toml
     sed -i "s#cors_allowed_origins = .*#cors_allowed_origins = [\"*\"]#g" /root/.local/share/namada/$CHAIN_ID/config.toml
     sed -i "s#prometheus = .*#prometheus = true#g" /root/.local/share/namada/$CHAIN_ID/config.toml

@@ -1,6 +1,7 @@
 version: "3.8"
 
 services:
+  # validator node
   namada-1:
     restart: unless-stopped
     hostname: namada-1
@@ -24,10 +25,11 @@ services:
       - DOMAIN=${DOMAIN:-knowable.run}
     ports:
       - "${P2P_PORT}:26656" # p2p
-      - "26657" # http rpc
+      # - "26657" # http rpc
       - "8082:8123" # configs server
 
   namada-2:
+    # rpc node
     restart: unless-stopped
     hostname: namada-2
     image: namada:${NAMADA_TAG}
@@ -42,9 +44,12 @@ services:
     - DOMAIN=${DOMAIN:-knowable.run}
     ports:
       - "26656" # p2p
-      - "26657" # http rpc
+      # - "26657" # http rpc
+      - "${RPC_PORT:-26657}:26657" # http rpc
+      - "26660:26660" # prometheus metrics
 
   namada-3:
+    # validator node
     restart: unless-stopped
     hostname: namada-3
     image: namada:${NAMADA_TAG}
@@ -59,8 +64,9 @@ services:
     - DOMAIN=${DOMAIN:-knowable.run}
     ports:
       - "26656" # p2p
-      - "${RPC_PORT:-26657}:26657" # http rpc
-      - "26660:26660"
+      - "26657"
+      # - "${RPC_PORT:-26657}:26657" # http rpc
+      # - "26660:26660"
 
 volumes:
   # shared 'network directory' for genesis txs etc that need to be shared between validators when generating genesis files

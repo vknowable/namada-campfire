@@ -15,6 +15,14 @@ LUMINARA "CAMPFIRE" NAMADA TESTNET
 Chain id: CHAIN_ID
 Version: NAMADA_TAG
 Purpose: Short-term testnet
+Peer: PEER
+
+Commands to join:
+export NAMADA_NETWORK_CONFIGS_SERVER="https://testnet.DOMAIN/configs"
+namadac utils join-network --chain-id CHAIN_ID --dont-prefetch-wasm
+
+...and then download the chain wasm from the link below and place inside your 'wasm' folder, and add the persistent peer above to your config.toml
+
 How to join/More info: <a href="https://knowabl.notion.site/Campfire-testnet-5e4c1df53ab64b818a55bfcf36ccc550">Campfire homepage (Notion)</a>
 Chain config .env: <a href="https://testnet.DOMAIN/CHAIN_PREFIX.env">https://testnet.DOMAIN/CHAIN_PREFIX.env</a>
 Namada Config tar.gz: <a href="https://testnet.DOMAIN/CHAIN_ID.tar.gz">https://testnet.DOMAIN/CHAIN_ID.tar.gz</a>
