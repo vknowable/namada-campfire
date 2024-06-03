@@ -16,6 +16,7 @@ services:
       - ../config/local-namada/make_balances.py:/scripts/make_balances.py
       - /usr/share/nginx/html:/output
       - ../config/local-namada/index.html:/index.html
+      - ../config/local-namada/words:/root/words
     environment:
       - P2P_PORT=${P2P_PORT}
       - EXTIP=${EXTIP}

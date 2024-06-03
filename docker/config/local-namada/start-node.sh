@@ -107,11 +107,15 @@ if [ $(hostname) = "namada-1" ]; then
     # add steward address to parameters.toml
     sed -i "s#STEWARD_ADDR#$steward_address#g" /root/.namada-shared/genesis/parameters.toml
 
+    # add a random word to the chain prefix for human readability
+    RANDOM_WORD=$(shuf -n 1 /root/words)
+    FULL_PREFIX="${CHAIN_PREFIX}-${RANDOM_WORD}"
+
     GENESIS_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
     INIT_OUTPUT=$(namadac utils init-network \
       --genesis-time "$GENESIS_TIME" \
       --wasm-checksums-path /wasm/checksums.json \
-      --chain-prefix $CHAIN_PREFIX \
+      --chain-prefix $FULL_PREFIX \
       --templates-path /root/.namada-shared/genesis \
       --consensus-timeout-commit 10s)
 
