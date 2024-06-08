@@ -26,10 +26,12 @@ docker container rm --force $(docker container ls --all | grep 'faucet-fe' | awk
 export CHAIN_ID=$(awk -F'=' '/default_chain_id/ {gsub(/[ "]/, "", $2); print $2}' "$HOME/chaindata/namada-1/global-config.toml")
 export NAM=$(awk '/\[addresses\]/ {found=1} found && /nam = / {gsub(/.*= "/, ""); sub(/"$/, ""); print; exit}' "$HOME/chaindata/namada-1/$CHAIN_ID/wallet.toml")
 
+source $HOME/campfire.env
+
 # write env file
 env_file=~/namada-interface/apps/faucet/.env
 {
-    echo "REACT_APP_FAUCET_API_ENDPOINT=https://api.faucet.knowable.run"
+    echo "REACT_APP_FAUCET_API_ENDPOINT=https://api.faucet.$DOMAIN"
     echo "REACT_APP_FAUCET_API_ENDPOINT=/api/v1/faucet"
     echo "REACT_APP_FAUCET_LIMIT=1000"
     echo "REACT_APP_TOKEN_NAM=$NAM"
