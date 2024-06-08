@@ -44,29 +44,3 @@ echo "**************************************************************************
 echo "Following faucet frontend logs, feel free to press Ctrl+C to exit!"
 docker logs -f $(docker container ls --all | grep faucet-fe | awk '{print $1}')
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Fetch the faucet private key
-export CHAIN_ID=$(awk -F'=' '/default_chain_id/ {gsub(/[ "]/, "", $2); print $2}' "$HOME/chaindata/namada-1/global-config.toml")
-export FAUCET_PK=$(awk '/\[secret_keys\]/ {found=1} found && /faucet-1 = / {gsub(/.*= "/, ""); sub(/"$/, ""); sub(/unencrypted:/, ""); print; exit}' "$HOME/chaindata/namada-1/$CHAIN_ID/wallet.toml")
-
-
-# Start the faucet backend
-cd ~/namada-faucet
-docker run --name faucet-be -d --network host faucet-be:local ./server --cargo-env development --difficulty 3 --private-key $FAUCET_PK --chain-start 1 --chain-id $CHAIN_ID --port 5000 --rps 10 --rpc http://127.0.0.1:26657
-
-echo "**************************************************************************************"
-echo "Following faucet backend logs, feel free to press Ctrl+C to exit!"
-docker logs -f $(docker container ls --all | grep faucet | awk '{print $1}')
