@@ -31,4 +31,4 @@ docker run --name faucet-be -d --network host faucet-be:local ./server --cargo-e
 
 echo "**************************************************************************************"
 echo "Following faucet backend logs, feel free to press Ctrl+C to exit!"
-docker logs -f $(docker container ls --all | grep faucet | awk '{print $1}')
+docker logs -f $(docker container ls --all | grep faucet-be | awk '{print $1}')
