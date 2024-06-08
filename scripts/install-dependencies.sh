@@ -20,7 +20,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 ## https://docs.docker.com/engine/install/ubuntu/
 ## https://superuser.com/questions/518859/ignore-packages-that-are-not-currently-installed-when-using-apt-get-remove1
-packages_to_remove="docker docker-engine docker.io containerd runc"
+packages_to_remove="docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc"
 installed_packages_to_remove=""
 for package_to_remove in $(echo $packages_to_remove); do
   $(dpkg --info $package_to_remove &> /dev/null)
