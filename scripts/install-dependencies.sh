@@ -8,7 +8,7 @@ if ! [[ $# -eq 1 && $1 == "-y" ]]; then
   echo "required packages."
   echo "Only proceed if you are sure you want to make those changes to this machine."
   echo "**************************************************************************************"
-  read -p "Are you sure you want to proceed? " -n 1 -r
+  read -p "Are you sure you want to proceed? (y/n) " -n 1 -r
   echo
   if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     exit 1
@@ -20,7 +20,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 ## https://docs.docker.com/engine/install/ubuntu/
 ## https://superuser.com/questions/518859/ignore-packages-that-are-not-currently-installed-when-using-apt-get-remove1
-packages_to_remove="docker docker-engine docker.io containerd runc"
+packages_to_remove="docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc"
 installed_packages_to_remove=""
 for package_to_remove in $(echo $packages_to_remove); do
   $(dpkg --info $package_to_remove &> /dev/null)
@@ -41,6 +41,8 @@ fi
 echo "**************************************************************************************"
 echo "Installing misc dependencies"
 echo "**************************************************************************************"
+
+
 sudo apt -y update
 
 # install misc dependencies
@@ -74,3 +76,24 @@ echo "command below (it should print a message beginning \"Hello from Docker!\")
 echo
 echo "docker run hello-world"
 echo
+
+
+sudo apt -y update
+
+echo "**************************************************************************************"
+echo "Installing nginx-full"
+echo "**************************************************************************************"
+sudo apt -y install nginx-full
+
+
+sudo apt -y update
+
+echo "**************************************************************************************"
+echo "Installing LetsEncrypt/Certbot"
+echo "**************************************************************************************"
+sudo apt -y install certbot python3 python3-pip python3-certbot-nginx
+
+sudo apt -y --only-upgrade install certbot
+sudo apt -y --only-upgrade install python3-urllib3
+sudo python3 -m pip uninstall urllib3
+sudo python3 -m pip install urllib3

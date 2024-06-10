@@ -18,7 +18,8 @@ if ! [[ $# -eq 1 && $1 == "-y" ]]; then
   fi
 fi
 
-read -p "Enter the Namada version to use for the new chain (eg: v0.37.0): " NAMADA_TAG
+echo "Select the Namada version to use for the new chain, found here: https://github.com/anoma/namada/releases"
+read -p "Enter the Namada version to use for the new chain (eg: v0.39.0): " NAMADA_TAG
 export NAMADA_TAG=$NAMADA_TAG
 
 # check if docker image already exists for that version -- if not build it
