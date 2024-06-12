@@ -60,7 +60,7 @@ echo "**************************************************************************
 # check for existing .env configuration file
 if [ -e "$HOME/campfire.env" ]; then
   echo "Using configuration file $HOME/campfire.env"
-  docker compose -f ~/namada-campfire/docker/compose/docker-compose-local-namada.yml --env-file ~/campfire.env up -d
+  docker compose -f $HOME/namada-campfire/docker/compose/docker-compose-local-namada.yml --env-file $HOME/campfire.env up -d
 else
   echo "Could not find expected configuration file $HOME/campfire.env"
   read -p "Enter the public ip of the server (eg: 142.32.13.100): " EXTIP
@@ -79,7 +79,7 @@ else
   echo "CHAIN_PREFIX=$CHAIN_PREFIX" >> "$CONFIG_OUTPUT_FILE"
   echo "Configuration saved to $CONFIG_OUTPUT_FILE"
 
-  docker compose -f ~/namada-campfire/docker/compose/docker-compose-local-namada.yml -d
+  docker compose -f $HOME/namada-campfire/docker/compose/docker-compose-local-namada.yml -d
 fi
 
 echo "Validator nodes started."
