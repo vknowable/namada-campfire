@@ -23,18 +23,27 @@ source $HOME/campfire.env
 # write env file
 env_file=$HOME/namada-interface/apps/faucet/.env
 {
-    # for this branch: v0.1.0-0e77e71
-    echo "REACT_APP_FAUCET_API_ENDPOINT=https://api.faucet.$DOMAIN"
+    # # for this branch: v0.1.0-0e77e71
+    # echo "REACT_APP_FAUCET_API_ENDPOINT=https://api.faucet.$DOMAIN"
+    # echo "REACT_APP_FAUCET_API_ENDPOINT=/api/v1/faucet"
+    # echo "REACT_APP_FAUCET_LIMIT=1000"
+    # echo "REACT_APP_TOKEN_NAM=$NAM"
+
+
+    # # for main branch as of: commit 570f068
+    # echo "NAMADA_INTERFACE_FAUCET_API_URL=https://api.faucet.$DOMAIN"
+    # echo "NAMADA_INTERFACE_FAUCET_API_ENDPOINT=/api/v1/faucet"
+    # echo "NAMADA_INTERFACE_FAUCET_LIMIT=1000"
+    # #echo "NAMADA_INTERFACE_PROXY_PORT=9000"
+    # echo "NAMADA_INTERFACE_NAMADA_TOKEN=$NAM"
+
+
+    # as documented in: namada-campfire/docker/container-build/faucet-frontend/README.md
+    echo "REACT_APP_FAUCET_API_URL=https://api.faucet.$DOMAIN"
     echo "REACT_APP_FAUCET_API_ENDPOINT=/api/v1/faucet"
     echo "REACT_APP_FAUCET_LIMIT=1000"
     echo "REACT_APP_TOKEN_NAM=$NAM"
 
-    # for main branch as of: commit 570f068
-    echo "NAMADA_INTERFACE_FAUCET_API_URL=https://api.faucet.$DOMAIN"
-    echo "NAMADA_INTERFACE_FAUCET_API_ENDPOINT=/api/v1/faucet"
-    echo "NAMADA_INTERFACE_FAUCET_LIMIT=1000"
-    #echo "NAMADA_INTERFACE_PROXY_PORT=9000"
-    echo "NAMADA_INTERFACE_NAMADA_TOKEN=$NAM"
 } > "$env_file"
 
 
