@@ -1,0 +1,93 @@
+include:
+  - docker-compose-db.yml
+
+services:
+  chain:
+    restart: on-failure
+    depends_on:
+      - postgres
+#    image: ghcr.io/anoma/namada-indexer:chain-main
+    image: namada/chain-indexer
+    build:
+      context: .
+      dockerfile: chain/Dockerfile
+    environment:
+      DATABASE_URL: postgres://postgres:password@postgres:5432/namada-indexer
+      TENDERMINT_URL: http://172.17.0.1:26657
+      CHAIN_ID: housefire-donor.4fb58546bff725
+      INITIAL_QUERY_RETRY_TIME: 60
+      CHECKSUMS_FILE: checksums.json
+
+  governance:
+    restart: on-failure
+    depends_on:
+      - postgres
+#    image: ghcr.io/anoma/namada-indexer:governance-main
+    image: namada/governance-indexer
+    build:
+      context: .
+      dockerfile: governance/Dockerfile
+    environment:
+      DATABASE_URL: postgres://postgres:password@postgres:5432/namada-indexer
+      TENDERMINT_URL: http://172.17.0.1:26657
+
+  pos:
+#    image: ghcr.io/anoma/namada-indexer:pos-main
+    image: namada/pos-indexer
+    restart: on-failure
+    depends_on:
+      - postgres
+    build:
+      context: .
+      dockerfile: pos/Dockerfile
+    environment:
+      DATABASE_URL: postgres://postgres:password@postgres:5432/namada-indexer
+      TENDERMINT_URL: http://172.17.0.1:26657
+
+  rewards:
+#    image: ghcr.io/anoma/namada-indexer:rewards-main
+    image: namada/rewards-indexer
+    restart: on-failure
+    depends_on:
+      - postgres
+    build:
+      context: .
+      dockerfile: rewards/Dockerfile
+    environment:
+      DATABASE_URL: postgres://postgres:password@postgres:5432/namada-indexer
+      TENDERMINT_URL: http://172.17.0.1:26657
+
+  parameters:
+    image: namada/parameters-indexer
+    restart: on-failure
+    depends_on:
+      - postgres
+    build:
+      context: .
+      dockerfile: parameters/Dockerfile
+    environment:
+      DATABASE_URL: postgres://postgres:password@postgres:5432/namada-indexer
+      TENDERMINT_URL: http://172.17.0.1:26657
+
+  webserver:
+#    image: ghcr.io/anoma/namada-indexer:webserver-main
+    image: namada/webserver-indexer
+    restart: on-failure
+    depends_on:
+      - postgres
+      - dragonfly
+    build:
+      context: .
+      dockerfile: webserver/Dockerfile
+    ports:
+      - 6000:5000
+    environment:
+      DATABASE_URL: postgres://postgres:password@postgres:5432/namada-indexer
+      CACHE_URL: redis://dragonfly:6379
+      TENDERMINT_URL: http://172.17.0.1:26657
+    healthcheck:
+      test: curl --fail http://localhost:5000/health || exit 1
+      interval: 15s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
