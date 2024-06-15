@@ -34,6 +34,7 @@ cd ~/namada-campfire
 
 ### Fetch Namada release tag for Campfire
 Visit: https://github.com/anoma/namada/releases
+
 (for example: v0.39.0)
 
 ### Prepare Campfire config
@@ -107,7 +108,7 @@ clear; docker logs -f $(docker container ls --all | grep interface | awk '{print
 
 ## Cleaning up docker containers and images
 
-[!CAUTION] CONTAINER CLEANUP: stops and deletes containers
+> [!CAUTION] CONTAINER CLEANUP: stops and deletes containers
 
 ### interface
 ```bash
@@ -144,7 +145,7 @@ docker image rm --force $(docker image ls --all | grep 'faucet-' | awk '{print $
 docker image rm --force $(docker image ls --all | grep 'interface' | awk '{print $3}')
 ```
 
-[!TIP] End of the Quick-Start!
+> [!TIP] End of the Quick-Start!
 
 
 
