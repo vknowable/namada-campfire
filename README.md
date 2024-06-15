@@ -145,9 +145,12 @@ docker image rm --force $(docker image ls --all | grep 'faucet-' | awk '{print $
 docker image rm --force $(docker image ls --all | grep 'interface' | awk '{print $3}')
 ```
 
+
 > [!TIP] End of the Quick-Start!
 
 
+
+---
 
 
 ### Recommended Installs
