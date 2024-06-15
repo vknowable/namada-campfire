@@ -108,7 +108,7 @@ clear; docker logs -f $(docker container ls --all | grep interface | awk '{print
 
 ## Cleaning up docker containers and images
 
-> [!CAUTION] CONTAINER CLEANUP: stops and deletes containers
+> ⚠️ CONTAINER CLEANUP: stops and deletes containers
 
 ### interface
 ```bash
@@ -135,7 +135,7 @@ docker container rm --force $(docker container ls --all | grep 'compose-namada-'
 ```
 
 
-### IMAGE CLEANUP: deletes images
+> ⚠️ IMAGE CLEANUP: deletes images
 ```bash
 # namada
 docker image rm --force $(docker image ls --all | grep 'namada' | awk '{print $3}')
