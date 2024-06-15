@@ -11,12 +11,58 @@ if ! [[ $# -eq 1 && $1 == "-y" ]]; then
   echo "associated data before attempting to relaunch with a new chain-id."
   echo "This script requires sudo privilege."
   echo "**************************************************************************************"
-  read -p "Are you sure you want to proceed? " -n 1 -r
+  read -p "Are you sure you want to proceed? (y/n) " -n 1 -r
   echo
   if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     exit 1
   fi
 fi
+
+
+echo "**************************************************************************************"
+echo "Destroying old chain and components..."
+echo "**************************************************************************************"
+
+echo "Stopping and removing:"
+
+
+namada_containers=("interface" "namada-indexer" "faucet-" "compose-namada-")
+
+for container in "${namada_containers[@]}"; do
+  docker_ids=$(docker container ls --all | grep "$container" | awk '{print $1}')
+  if [ -n "$docker_ids" ]; then
+    echo "Stopping container: '$container'..."
+    docker container stop $docker_ids
+
+    echo "Removing container: '$container'..."
+    docker container rm --force $docker_ids
+  else
+    echo "No container found matching: '$container'."
+  fi
+done
+
+
+namada_containers=("interface" "faucet-" "namada")
+
+# Loop through each image name pattern
+for image in "${namada_containers[@]}"; do
+  image_ids=$(docker image ls --all | grep "$image" | awk '{print $3}')
+  if [ -n "$image_ids" ]; then
+    echo "Removing images: '$image'..."
+    docker image rm --force $image_ids
+  else
+    echo "No image found matching: '$image'."
+  fi
+done
+
+
+echo "Removing validators:"
+docker compose -f $HOME/namada-campfire/docker/compose/docker-compose-local-namada.yml --env-file $HOME/campfire.env down --volumes
+sudo rm -rf $HOME/chaindata
+
+echo "Done"
+
+
 
 echo "Select the Namada version to use for the new chain, found here: https://github.com/anoma/namada/releases"
 read -p "Enter the Namada version to use for the new chain (eg: v0.39.0): " NAMADA_TAG
@@ -26,7 +72,7 @@ export NAMADA_TAG=$NAMADA_TAG
 if docker images | grep -q "namada\s*$NAMADA_TAG"; then
   echo "Image for namada:$NAMADA_TAG found. Continuing..."
 else
-  read -p "Image for namada:$NAMADA_TAG not found. Would you like to build it now? " -n 1 -r
+  read -p "Image for namada:$NAMADA_TAG not found. Would you like to build it now? (y/n) " -n 1 -r
   echo
   if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     exit 1
@@ -36,22 +82,6 @@ else
   fi
 fi
 
-echo "**************************************************************************************"
-echo "Destroying old chain..."
-echo "**************************************************************************************"
-echo "Stopping:"
-docker stop faucet-be
-echo "Removing:"
-docker rm faucet-be
-echo "Stopping:"
-docker stop faucet-fe
-echo "Removing:"
-docker rm faucet-fe
-echo "Removing validators:"
-docker compose -f $HOME/namada-campfire/docker/compose/docker-compose-local-namada.yml --env-file $HOME/campfire.env down --volumes
-sudo rm -rf $HOME/chaindata
-
-echo "Done"
 
 echo "**************************************************************************************"
 echo "Relaunching validator nodes..."
@@ -105,31 +135,27 @@ if [ "$SECONDS" -ge "$END_TIME" ]; then
     exit 1
 fi
 
-# read chain-id
-export CHAIN_ID=$(awk -F'=' '/default_chain_id/ {gsub(/[ "]/, "", $2); print $2}' "$HOME/chaindata/namada-1/global-config.toml")
-# read faucet private key
-# export FAUCET_PK=$(awk '/\[secret_keys\]/ {found=1} found && /faucet-1/ {gsub(/.*unencrypted:/, ""); print; exit}' "$HOME/chaindata/namada-1/$CHAIN_ID/wallet.toml")
-export FAUCET_PK=$(awk '/\[secret_keys\]/ {found=1} found && /faucet-1/ {gsub(/.*unencrypted:/, ""); sub(/"$/, ""); print; exit}' "$HOME/chaindata/namada-1/$CHAIN_ID/wallet.toml")
 
-# TODO: read NAM address and verify it equals tnam1q87wtaqqtlwkw927gaff34hgda36huk0kgry692a
-# if not, edit faucet-fe .env file and rebuild container
 
-echo "**************************************************************************************"
-echo "Starting faucet..."
-echo "**************************************************************************************"
+if ! [[ $# -eq 1 && $1 == "-y" ]]; then
+  echo "**************************************************************************************"
+  echo "The following steps would be to (re)launch the faucet, indexer, and interface!"
+  echo "**************************************************************************************"
+  read -p "Would you like to execute these steps? (y/n) " -n 1 -r
+  echo
+  if [[ $REPLY =~ [Yy]$ ]]; then
+    # Include adjacent launch-.sh scripts
+    $HOME/namada-campfire/scripts/launch-faucet-be.sh
+    $HOME/namada-campfire/scripts/launch-faucet-fe.sh
+    $HOME/namada-campfire/scripts/launch-indexer.sh
+    $HOME/namada-campfire/scripts/launch-interface.sh
+  fi
+fi
 
-# start faucet backend
-echo "Backend container-id:"
-docker run --name faucet-be -d -p "5000:5000" faucet-be:local ./server \
-  --cargo-env development --difficulty 3 --private-key $FAUCET_PK --chain-start 1 \
-  --chain-id $CHAIN_ID --port 5000 --rps 10  --rpc http://172.17.0.1:26657
 
-# start faucet frontend
-echo "Frontend container-id:"
-docker run --name faucet-fe -d -p "4000:80" faucet-fe:local
 
 echo "Done"
-
+export CHAIN_ID=$(awk -F'=' '/default_chain_id/ {gsub(/[ "]/, "", $2); print $2}' "$HOME/chaindata/namada-1/global-config.toml")
 echo "**************************************************************************************"
 echo "Campfire relaunched!"
 echo "Chain-id: $CHAIN_ID"
