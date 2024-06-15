@@ -29,7 +29,9 @@ echo "Stopping and removing:"
 namada_containers=("interface" "namada-indexer" "faucet-" "compose-namada-")
 
 for container in "${namada_containers[@]}"; do
+
   docker_ids=$(docker container ls --all | grep "$container" | awk '{print $1}')
+
   if [ -n "$docker_ids" ]; then
     echo "Stopping container: '$container'..."
     docker container stop $docker_ids
@@ -39,21 +41,33 @@ for container in "${namada_containers[@]}"; do
   else
     echo "No container found matching: '$container'."
   fi
+
 done
 
 
-namada_containers=("interface" "faucet-" "namada")
+if ! [[ $# -eq 1 && $1 == "-y" ]]; then
+  echo "**************************************************************************************"
+  echo "Should we wipe and rebuild all namada component images (namada, faucet, interface)?"
+  echo "**************************************************************************************"
+  read -p "This is not necessary, but would you like to wipe these component images? (y/n) " -n 1 -r
+  echo
+  if [[ $REPLY =~ [Yy]$ ]]; then
+    
+    namada_containers=("interface" "faucet-" "namada")
 
-# Loop through each image name pattern
-for image in "${namada_containers[@]}"; do
-  image_ids=$(docker image ls --all | grep "$image" | awk '{print $3}')
-  if [ -n "$image_ids" ]; then
-    echo "Removing images: '$image'..."
-    docker image rm --force $image_ids
-  else
-    echo "No image found matching: '$image'."
+    for image in "${namada_containers[@]}"; do
+      image_ids=$(docker image ls --all | grep "$image" | awk '{print $3}')
+      if [ -n "$image_ids" ]; then
+        echo "Removing images: '$image'..."
+        docker image rm --force $image_ids
+      else
+        echo "No image found matching: '$image'."
+      fi
+    done
+
   fi
-done
+fi
+
 
 
 echo "Removing validators:"
