@@ -18,6 +18,9 @@ RUN mkdir /root/$REPO_NAME
 WORKDIR /root/$REPO_NAME
 COPY . .
 
+# copy the .env file
+COPY apps/namadillo/.env /root/namada-interface/apps/namadillo/.env
+
 # build
 RUN yarn
 WORKDIR /root/$REPO_NAME/apps/$APP_NAME

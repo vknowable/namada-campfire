@@ -73,4 +73,4 @@ sudo systemctl reload nginx
 
 
 # Fetching the certificates
-sudo certbot --nginx -d $TLD_NAME -d testnet.$TLD_NAME -d faucet.$TLD_NAME -d api.faucet.$TLD_NAME -d rpc.$TLD_NAME --register-unsafely-without-email --agree-tos
+sudo certbot --nginx -d $TLD_NAME -d testnet.$TLD_NAME -d faucet.$TLD_NAME -d api.faucet.$TLD_NAME -d rpc.$TLD_NAME -d interface.$TLD_NAME --register-unsafely-without-email --agree-tos
