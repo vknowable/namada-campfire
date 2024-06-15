@@ -182,7 +182,7 @@ if [ ! -d "/root/.local/share/namada/$CHAIN_ID/db" ] || [ -z "$(ls -A /root/.loc
     sed -i "s#external_address = \".*\"#external_address = \"$EXTIP:${P2P_PORT:-26656}\"#g" /root/.local/share/namada/$CHAIN_ID/config.toml
     ## modified for public facing nginx
     namada node ledger run-until --block-height 0 --halt
-    NODE_ID=$(cometbft show-node-id --home ~/.local/share/namada/$CHAIN_ID/cometbft/ | awk '{last_line = $0} END {print last_line}')
+    NODE_ID=$(cometbft show-node-id --home $HOME/.local/share/namada/$CHAIN_ID/cometbft/ | awk '{last_line = $0} END {print last_line}')
     rm -f /output/*.tar.gz
     cp /*.tar.gz /output
     # Write content to $CHAIN_PREFIX.env
