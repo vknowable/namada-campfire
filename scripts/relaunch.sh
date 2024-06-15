@@ -159,6 +159,7 @@ if ! [[ $# -eq 1 && $1 == "-y" ]]; then
   echo
   if [[ $REPLY =~ [Yy]$ ]]; then
     # Include adjacent launch-.sh scripts
+    export LOGS_NOFOLLOW=true
     $HOME/namada-campfire/scripts/launch-faucet-be.sh
     $HOME/namada-campfire/scripts/launch-faucet-fe.sh
     $HOME/namada-campfire/scripts/launch-indexer.sh

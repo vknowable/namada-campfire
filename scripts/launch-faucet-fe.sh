@@ -63,7 +63,9 @@ docker build -t faucet-fe:local .
 cd $HOME/namada-interface
 docker run --name faucet-fe -d -p "4000:80" faucet-fe:local
 
-echo "**************************************************************************************"
-echo "Following faucet frontend logs, feel free to press Ctrl+C to exit!"
-docker logs -f $(docker container ls --all | grep faucet-fe | awk '{print $1}')
 
+if [ -z "${LOGS_NOFOLLOW}" ]; then
+    echo "**************************************************************************************"
+    echo "Following faucet frontend logs, feel free to press Ctrl+C to exit!"
+    docker logs -f $(docker container ls --all | grep faucet-fe | awk '{print $1}')
+fi

@@ -46,3 +46,10 @@ env_file="$REPO_DIR/$INTERFACE_DIR/.env"
 docker stop interface && docker rm interface
 docker build -f $REPO_DIR/Dockerfile-interface -t interface:local $REPO_DIR
 docker run --name interface -d -p "3000:80" interface:local
+
+
+if [ -z "${LOGS_NOFOLLOW}" ]; then
+    echo "**************************************************************************************"
+    echo "Following interface logs, feel free to press Ctrl+C to exit!"
+    docker logs -f $(docker container ls --all | grep interface | awk '{print $1}')
+fi
