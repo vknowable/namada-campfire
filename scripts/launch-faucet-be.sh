@@ -7,7 +7,7 @@ git clone -b campfire-faucet https://github.com/vknowable/namada-faucet.git
 
 
 # Copy over the docker file
-cp $HOME/namada-campfire/docker/container-build/faucet-backend/Dockerfile $HOME/namada-faucet/Dockerfile    
+cp -f $HOME/namada-campfire/docker/container-build/faucet-backend/Dockerfile $HOME/namada-faucet/Dockerfile    
 
 
 # Build
