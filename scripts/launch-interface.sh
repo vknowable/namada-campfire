@@ -27,12 +27,19 @@ source $HOME/campfire.env
 # write env file
 env_file="$REPO_DIR/$INTERFACE_DIR/.env"
 {
+    echo "NODE_ENV=\"development\""
+    echo "NAMADA_INTERFACE_LOCAL=\"false\""
+
     echo "NAMADA_INTERFACE_NAMADA_ALIAS=\"Campfire Testnet\""
     echo "NAMADA_INTERFACE_NAMADA_TOKEN=\"$NAM\""
     echo "NAMADA_INTERFACE_NAMADA_CHAIN_ID=\"$CHAIN_ID\""
     echo "NAMADA_INTERFACE_NAMADA_URL=\"https://rpc.$DOMAIN:443\""
     echo "NAMADA_INTERFACE_NAMADA_BECH32_PREFIX=\"tnam\""
     echo "NAMADA_INTERFACE_INDEXER_URL=\"https://indexer.$DOMAIN:443\""
+
+    echo "NAMADA_INTERFACE_NAMADA_FAUCET_ADDRESS=https://api.faucet.$DOMAIN"
+    echo "NAMADA_INTERFACE_NAMADA_FAUCET_LIMIT=1000"
+
 } > "$env_file"
 
 
