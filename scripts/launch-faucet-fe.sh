@@ -17,6 +17,7 @@ cp $HOME/namada-campfire/docker/container-build/faucet-frontend/nginx.conf $HOME
 export CHAIN_ID=$(awk -F'=' '/default_chain_id/ {gsub(/[ "]/, "", $2); print $2}' "$HOME/chaindata/namada-1/global-config.toml")
 export NAM=$(awk '/\[addresses\]/ {found=1} found && /nam = / {gsub(/.*= "/, ""); sub(/"$/, ""); print; exit}' "$HOME/chaindata/namada-1/$CHAIN_ID/wallet.toml")
 
+
 # to get our $DOMAIN
 source $HOME/campfire.env
 
@@ -29,14 +30,12 @@ env_file=$HOME/namada-interface/apps/faucet/.env
     # echo "REACT_APP_FAUCET_LIMIT=1000"
     # echo "REACT_APP_TOKEN_NAM=$NAM"
 
-
     # # for main branch as of: commit 570f068
     # echo "NAMADA_INTERFACE_FAUCET_API_URL=https://api.faucet.$DOMAIN"
     # echo "NAMADA_INTERFACE_FAUCET_API_ENDPOINT=/api/v1/faucet"
     # echo "NAMADA_INTERFACE_FAUCET_LIMIT=1000"
     # #echo "NAMADA_INTERFACE_PROXY_PORT=9000"
     # echo "NAMADA_INTERFACE_NAMADA_TOKEN=$NAM"
-
 
     # as documented in: namada-campfire/docker/container-build/faucet-frontend/README.md
     echo "REACT_APP_FAUCET_API_URL=https://api.faucet.$DOMAIN"
