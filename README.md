@@ -3,9 +3,9 @@
 
 ## Quick Start Guide
 
-Fork Repo in your GitHub org (already done below)
-### Visit:
-https://github.com/vknowable/namada-campfire
+
+### Fork Repo in your GitHub org (already done below)
+Visit: https://github.com/vknowable/namada-campfire
 
 
 ### Set Repo Org
