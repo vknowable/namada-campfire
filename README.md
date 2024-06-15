@@ -1,14 +1,14 @@
 # Namada "Campfire" Testnet Hosting Resources
 
+
 ## Quick Start Guide
 
-
-### Fork Repo in your GitHub org (already done below)
-# Visit:
+Fork Repo in your GitHub org (already done below)
+### Visit:
 https://github.com/vknowable/namada-campfire
 
 
-### Set Your Repo Org
+### Set Repo Org
 ```bash
 export GITORG=knowable
 cd ~
