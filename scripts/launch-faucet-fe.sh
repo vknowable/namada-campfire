@@ -52,7 +52,9 @@ source $env_file
 # Tear down any conatiners, remove them and their images
 docker stop $(docker container ls --all | grep 'faucet-fe' | awk '{print $1}')
 docker container rm --force $(docker container ls --all | grep 'faucet-fe' | awk '{print $1}')
-docker image rm --force $(docker image ls --all | grep 'faucet-fe' | awk '{print $3}')
+if [ -z "${LOGS_NOFOLLOW}" ]; then
+    docker image rm --force $(docker image ls --all | grep 'faucet-fe' | awk '{print $3}')
+fi
 
 # Build
 cd $HOME/namada-interface
