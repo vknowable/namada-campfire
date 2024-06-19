@@ -21,6 +21,7 @@ cp -f $HOME/namada-campfire/docker/container-build/namada-interface/nginx.conf $
 
 export CHAIN_ID=$(awk -F'=' '/default_chain_id/ {gsub(/[ "]/, "", $2); print $2}' "$HOME/chaindata/namada-1/global-config.toml")
 export NAM=$(awk '/\[addresses\]/ {found=1} found && /nam = / {gsub(/.*= "/, ""); sub(/"$/, ""); print; exit}' "$HOME/chaindata/namada-1/$CHAIN_ID/wallet.toml")
+export FAUCET_ADDRESS=$(awk '/\[addresses\]/ {found=1} found && /faucet-1 = / {gsub(/.*= "/, ""); sub(/"$/, ""); sub(/unencrypted:/, ""); print; exit}' "$HOME/chaindata/namada-1/$CHAIN_ID/wallet.toml")
 
 source $HOME/campfire.env
 
@@ -37,13 +38,21 @@ env_file="$REPO_DIR/$INTERFACE_DIR/.env"
     echo "NAMADA_INTERFACE_NAMADA_BECH32_PREFIX=\"tnam\""
     echo "NAMADA_INTERFACE_INDEXER_URL=\"https://indexer.$DOMAIN:443\""
 
-    echo "NAMADA_INTERFACE_NAMADA_FAUCET_ADDRESS=https://api.faucet.$DOMAIN"
+    echo "REACT_APP_NAMADA_FAUCET_ADDRESS=\"$FAUCET_ADDRESS\""
+    echo "NAMADA_INTERFACE_NAMADA_FAUCET_ADDRESS=\"$FAUCET_ADDRESS\""
     echo "NAMADA_INTERFACE_NAMADA_FAUCET_LIMIT=1000"
 
 } > "$env_file"
 
 
-docker stop interface && docker rm interface
+# tear down
+docker stop $(docker container ls --all | grep 'interface' | awk '{print $1}')
+docker container rm --force $(docker container ls --all | grep 'interface' | awk '{print $1}')
+if [ -z "${LOGS_NOFOLLOW}" ]; then
+    docker image rm --force $(docker image ls --all | grep 'interface' | awk '{print $3}')
+fi
+
+# build and run
 docker build -f $REPO_DIR/Dockerfile-interface -t interface:local $REPO_DIR
 docker run --name interface -d -p "3000:80" interface:local
 
