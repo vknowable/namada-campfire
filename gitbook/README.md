@@ -14,7 +14,6 @@ Tell #🏕️-testnet-campfire if you join!
 - [Latest News](./news)
 - Instructions for how to [Run a Node](./install.md)
 - Campfire [Features](./features)
-- [Development Resources](./development)
 - [FAQ](./faq)
 
 ---
