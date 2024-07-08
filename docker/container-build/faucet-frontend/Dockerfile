@@ -15,6 +15,9 @@ RUN mkdir /root/namada-interface
 WORKDIR /root/namada-interface
 COPY . .
 
+# copy the .env file
+COPY apps/faucet/.env /root/namada-interface/apps/faucet/.env
+
 # build `shared` package
 WORKDIR /root/namada-interface/packages/shared
 RUN yarn

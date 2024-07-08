@@ -1,5 +1,158 @@
 # Namada "Campfire" Testnet Hosting Resources
 
+
+## Quick Start Guide
+
+
+### Fork Repo in your GitHub org (already done below)
+Visit: https://github.com/vknowable/namada-campfire
+
+
+### Set Repo Org
+```bash
+export GITORG=knowable
+cd ~
+rm -rf ~/namada-campfire
+git clone https://github.com/$GITORG/namada-campfire
+```
+
+### Install Dependencies (docker/nginx-full/certbot)
+```bash
+cd ~/namada-campfire
+./scripts/install-dependencies.sh
+# reconnect to SSH to activate docker group
+```
+
+### Prepare domain/subdomains
+NOTE: perhaps subdomain and subdomain wildcard DNS entries to make this easy
+
+```bash
+### Prepare SSL Certs
+cd ~/namada-campfire
+./scripts/prepare-ssl-certs.sh
+```
+
+### Fetch Namada release tag for Campfire
+Visit: https://github.com/anoma/namada/releases
+
+(for example: v0.39.0)
+
+### Prepare Campfire config
+```bash
+cp ~/namada-campfire/config/campfire.env ~/campfire.env
+nano ~/campfire.env
+# edit the file and update with chain values
+```
+
+### Start Campfire devnet
+```bash
+cd ~/namada-campfire
+./scripts/relaunch.sh
+```
+
+You will be presented with the option to launch all Namada Campfire components like so:
+```
+**************************************************************************************
+The following steps would be to (re)launch the faucet, indexer, and interface!
+**************************************************************************************
+Would you like to execute these steps? (y/n)
+```
+
+That's it! If you answered "y" to the above, you will not need to launch the following components separately.
+
+But here they are for your reference!
+
+
+## Namada Campfire Component (Re)Launch (separately)
+
+
+### Start Faucet backend
+```bash
+cd ~/namada-campfire
+./scripts/launch-faucet-be.sh
+
+# watch faucet-be logs
+clear; docker logs -f $(docker container ls --all | grep faucet-fe | awk '{print $1}')
+```
+
+
+### Start Faucet frontend
+```bash
+cd ~/namada-campfire
+./scripts/launch-faucet-fe.sh
+
+# watch faucet-fe logs
+clear; docker logs -f $(docker container ls --all | grep faucet-fe | awk '{print $1}')
+````
+
+
+### Start Indexer
+```bash
+cd ~/namada-campfire
+./scripts/launch-indexer.sh
+
+# watch faucet-fe logs
+clear; docker logs -f $(docker container ls --all | grep interface | awk '{print $1}')
+```
+
+
+### Start Interface
+```bash
+cd ~/namada-campfire
+./scripts/launch-interface.sh
+
+# watch faucet-fe logs
+clear; docker logs -f $(docker container ls --all | grep interface | awk '{print $1}')
+```
+
+
+## Cleaning up docker containers and images
+
+> ⚠️ CONTAINER CLEANUP: stops and deletes containers
+
+### interface
+```bash
+docker container stop $(docker container ls --all | grep 'interface' | awk '{print $1}')
+docker container rm --force $(docker container ls --all | grep 'interface' | awk '{print $1}')
+```
+
+### indexer
+```bash
+docker container stop $(docker container ls --all | grep 'namada-indexer' | awk '{print $1}')
+docker container rm --force $(docker container ls --all | grep 'namada-indexer' | awk '{print $1}')
+```
+
+### faucet-be and faucet-fe
+```bash
+docker container stop $(docker container ls --all | grep 'faucet-' | awk '{print $1}')
+docker container rm --force $(docker container ls --all | grep 'faucet-' | awk '{print $1}')
+```
+
+### namada
+```bash
+docker container stop $(docker container ls --all | grep 'compose-namada-' | awk '{print $1}')
+docker container rm --force $(docker container ls --all | grep 'compose-namada-' | awk '{print $1}')
+```
+
+
+> ⚠️ IMAGE CLEANUP: deletes images
+```bash
+# namada
+docker image rm --force $(docker image ls --all | grep 'namada' | awk '{print $3}')
+# faucet
+docker image rm --force $(docker image ls --all | grep 'faucet-' | awk '{print $3}')
+# interface
+docker image rm --force $(docker image ls --all | grep 'interface' | awk '{print $3}')
+```
+
+
+> [!TIP] End of the Quick-Start!
+
+
+
+---
+
+
 ### Recommended Installs
 - (required) Docker/Compose (there is an install script to install Docker and a few other misc dependencies in the `scripts` folder). If you are a non-root user, you will want to add yourself to the 'docker' group so that you can run docker commands without sudo (to ensure scripts work as intended without stopping to prompt for a password)
 - Nginx to proxy to landing page, rpc, faucet etc (example nginx config in `config` folder)

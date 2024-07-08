@@ -23,6 +23,7 @@ if [ ! -f "/root/.namada-shared/chain.config" ]; then
 
     EST_ADDRESS=$(echo $est_output | grep -o 'tnam[[:alnum:]]*')
     # promote established account to validator
+    # changed from self-bond-amount 1000000000 to env variable
     namadac utils init-genesis-validator \
       --alias $ALIAS \
       --address $EST_ADDRESS \
@@ -34,7 +35,7 @@ if [ ! -f "/root/.namada-shared/chain.config" ]; then
       --description "The $ALIAS validator." \
       --website "http://$ALIAS.io" \
       --discord-handle "$ALIAS" \
-      --self-bond-amount 10000000 \
+      --self-bond-amount $SELF_BOND_AMT \
       --unsafe-dont-encrypt
 
     mkdir -p /root/.namada-shared/$ALIAS
@@ -102,7 +103,11 @@ if [ $(hostname) = "namada-1" ]; then
     cat /root/.namada-shared/$STEWARD_ALIAS/transactions.toml >> /root/.namada-shared/genesis/transactions.toml
     cat /root/.namada-shared/$FAUCET_ALIAS/transactions.toml >> /root/.namada-shared/genesis/transactions.toml
 
-    python3 /scripts/make_balances.py /root/.namada-shared /genesis/balances.toml > /root/.namada-shared/genesis/balances.toml
+    python3 /scripts/make_balances.py /root/.namada-shared /genesis/balances.toml $SELF_BOND_AMT > /root/.namada-shared/genesis/balances.toml
+
+    echo "Genesis balances:"
+    cat /root/.namada-shared/genesis/balances.toml
+    echo ""
 
     # add steward address to parameters.toml
     sed -i "s#STEWARD_ADDR#$steward_address#g" /root/.namada-shared/genesis/parameters.toml
@@ -111,12 +116,18 @@ if [ $(hostname) = "namada-1" ]; then
     RANDOM_WORD=$(shuf -n 1 /root/words)
     FULL_PREFIX="${CHAIN_PREFIX}-${RANDOM_WORD}"
 
-    GENESIS_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+    # add a random word to the chain prefix for human readability
+    RANDOM_WORD=$(shuf -n 1 /root/words)
+    FULL_PREFIX="${CHAIN_PREFIX}-${RANDOM_WORD}"
+
+    GENESIS_TIME=$(date -u -d "+$GENESIS_DELAY_MINS minutes" +"%Y-%m-%dT%H:%M:%S.000000000+00:00")
     INIT_OUTPUT=$(namadac utils init-network \
+      --chain-prefix $CHAIN_PREFIX \
       --genesis-time "$GENESIS_TIME" \
       --wasm-checksums-path /wasm/checksums.json \
       --chain-prefix $FULL_PREFIX \
       --templates-path /root/.namada-shared/genesis \
+      --wasm-checksums-path /wasm/checksums.json \
       --consensus-timeout-commit 10s)
 
     echo "$INIT_OUTPUT"
@@ -186,7 +197,7 @@ if [ ! -d "/root/.local/share/namada/$CHAIN_ID/db" ] || [ -z "$(ls -A /root/.loc
     sed -i "s#external_address = \".*\"#external_address = \"$EXTIP:${P2P_PORT:-26656}\"#g" /root/.local/share/namada/$CHAIN_ID/config.toml
     ## modified for public facing nginx
     namada node ledger run-until --block-height 0 --halt
-    NODE_ID=$(cometbft show-node-id --home ~/.local/share/namada/$CHAIN_ID/cometbft/ | awk '{last_line = $0} END {print last_line}')
+    NODE_ID=$(cometbft show-node-id --home $HOME/.local/share/namada/$CHAIN_ID/cometbft/ | awk '{last_line = $0} END {print last_line}')
     rm -f /output/*.tar.gz
     cp /*.tar.gz /output
     # Write content to $CHAIN_PREFIX.env
