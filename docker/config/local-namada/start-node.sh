@@ -23,6 +23,7 @@ if [ ! -f "/root/.namada-shared/chain.config" ]; then
 
     EST_ADDRESS=$(echo $est_output | grep -o 'tnam[[:alnum:]]*')
     # promote established account to validator
+    # changed from self-bond-amount 1000000000 to env variable
     namadac utils init-genesis-validator \
       --alias $ALIAS \
       --address $EST_ADDRESS \
@@ -34,7 +35,7 @@ if [ ! -f "/root/.namada-shared/chain.config" ]; then
       --description "The $ALIAS validator." \
       --website "http://$ALIAS.io" \
       --discord-handle "$ALIAS" \
-      --self-bond-amount 10000000 \
+      --self-bond-amount $SELF_BOND_AMT \
       --unsafe-dont-encrypt
 
     mkdir -p /root/.namada-shared/$ALIAS
@@ -102,17 +103,21 @@ if [ $(hostname) = "namada-1" ]; then
     cat /root/.namada-shared/$STEWARD_ALIAS/transactions.toml >> /root/.namada-shared/genesis/transactions.toml
     cat /root/.namada-shared/$FAUCET_ALIAS/transactions.toml >> /root/.namada-shared/genesis/transactions.toml
 
-    python3 /scripts/make_balances.py /root/.namada-shared /genesis/balances.toml > /root/.namada-shared/genesis/balances.toml
+    python3 /scripts/make_balances.py /root/.namada-shared /genesis/balances.toml $SELF_BOND_AMT > /root/.namada-shared/genesis/balances.toml
+
+    echo "Genesis balances:"
+    cat /root/.namada-shared/genesis/balances.toml
+    echo ""
 
     # add steward address to parameters.toml
     sed -i "s#STEWARD_ADDR#$steward_address#g" /root/.namada-shared/genesis/parameters.toml
 
-    GENESIS_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+    GENESIS_TIME=$(date -u -d "+$GENESIS_DELAY_MINS minutes" +"%Y-%m-%dT%H:%M:%S.000000000+00:00")
     INIT_OUTPUT=$(namadac utils init-network \
-      --genesis-time "$GENESIS_TIME" \
-      --wasm-checksums-path /wasm/checksums.json \
       --chain-prefix $CHAIN_PREFIX \
+      --genesis-time "$GENESIS_TIME" \
       --templates-path /root/.namada-shared/genesis \
+      --wasm-checksums-path /wasm/checksums.json \
       --consensus-timeout-commit 10s)
 
     echo "$INIT_OUTPUT"

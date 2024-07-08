@@ -6,10 +6,10 @@ services:
     restart: unless-stopped
     hostname: namada-1
     image: namada:${NAMADA_TAG}
-    entrypoint: ["sh", "/docker-entrypoint-scripts.d/start-node.sh"]
+    entrypoint: [ "sh", "/docker-entrypoint-scripts.d/start-node.sh" ]
     volumes:
       - ../config/local-namada/start-node.sh:/docker-entrypoint-scripts.d/start-node.sh
-  # chain data location; change this to an appropriate location on your system
+      # chain data location; change this to an appropriate location on your system
       - $HOME/chaindata/namada-1:/root/.local/share/namada
       - namada-shared:/root/.namada-shared
       - ../config/local-namada/genesis:/genesis:ro
@@ -23,6 +23,8 @@ services:
       - NAMADA_TAG=${NAMADA_TAG}
       - CHAIN_PREFIX=${CHAIN_PREFIX:-luminara}
       - DOMAIN=${DOMAIN:-knowable.run}
+      - SELF_BOND_AMT=${SELF_BOND_AMT:-1000000000}
+      - GENESIS_DELAY_MINS=${GENESIS_DELAY_MINS:-1}
     ports:
       - "${P2P_PORT}:26656" # p2p
       # - "26657" # http rpc
@@ -33,15 +35,17 @@ services:
     restart: unless-stopped
     hostname: namada-2
     image: namada:${NAMADA_TAG}
-    entrypoint: ["sh", "/docker-entrypoint-scripts.d/start-node.sh"]
+    entrypoint: [ "sh", "/docker-entrypoint-scripts.d/start-node.sh" ]
     volumes:
       - ../config/local-namada/start-node.sh:/docker-entrypoint-scripts.d/start-node.sh
-  # chain data location; change this to an appropriate location on your system
+      # chain data location; change this to an appropriate location on your system
       - $HOME/chaindata/namada-2:/root/.local/share/namada
       - namada-shared:/root/.namada-shared
     environment:
-    - CHAIN_PREFIX=${CHAIN_PREFIX:-luminara}
-    - DOMAIN=${DOMAIN:-knowable.run}
+      - CHAIN_PREFIX=${CHAIN_PREFIX:-luminara}
+      - DOMAIN=${DOMAIN:-knowable.run}
+      - SELF_BOND_AMT=${SELF_BOND_AMT:-1000000000}
+      - GENESIS_DELAY_MINS=${GENESIS_DELAY_MINS:-1}
     ports:
       - "26656" # p2p
       # - "26657" # http rpc
@@ -53,15 +57,17 @@ services:
     restart: unless-stopped
     hostname: namada-3
     image: namada:${NAMADA_TAG}
-    entrypoint: ["sh", "/docker-entrypoint-scripts.d/start-node.sh"]
+    entrypoint: [ "sh", "/docker-entrypoint-scripts.d/start-node.sh" ]
     volumes:
       - ../config/local-namada/start-node.sh:/docker-entrypoint-scripts.d/start-node.sh
-  # chain data location; change this to an appropriate location on your system
+      # chain data location; change this to an appropriate location on your system
       - $HOME/chaindata/namada-3:/root/.local/share/namada
       - namada-shared:/root/.namada-shared
     environment:
-    - CHAIN_PREFIX=${CHAIN_PREFIX:-luminara}
-    - DOMAIN=${DOMAIN:-knowable.run}
+      - CHAIN_PREFIX=${CHAIN_PREFIX:-luminara}
+      - DOMAIN=${DOMAIN:-knowable.run}
+      - SELF_BOND_AMT=${SELF_BOND_AMT:-1000000000}
+      - GENESIS_DELAY_MINS=${GENESIS_DELAY_MINS:-1}
     ports:
       - "26656" # p2p
       - "26657"

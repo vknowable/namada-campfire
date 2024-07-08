@@ -3,7 +3,9 @@
 ### Grab the repo
 rm -rf $HOME/namada-faucet
 cd $HOME
+#git clone -b master https://github.com/heliaxdev/namada-faucet
 git clone -b campfire-faucet https://github.com/vknowable/namada-faucet.git
+#git clone -b campfire-faucet https://github.com/sirouk/namada-faucet.git
 
 
 # Copy over the docker file
@@ -27,7 +29,8 @@ export FAUCET_PK=$(awk '/\[secret_keys\]/ {found=1} found && /faucet-1 = / {gsub
 
 # Start the faucet backend
 cd $HOME/namada-faucet
-docker run --name faucet-be -d --network host faucet-be:local ./server --cargo-env development --difficulty 3 --private-key $FAUCET_PK --chain-start 1 --chain-id $CHAIN_ID --port 5000 --rps 10 --rpc http://127.0.0.1:26657
+#docker run --name faucet-be -d --network host faucet-be:local ./server --cargo-env development --difficulty 3 --private-key $FAUCET_PK --chain-start 1 --chain-id $CHAIN_ID --port 5000 --rps 10 --rpc http://127.0.0.1:26657
+docker run --name faucet-be -d --network host faucet-be:local ./server --difficulty 3 --private-key $FAUCET_PK --chain-start 1 --chain-id $CHAIN_ID --port 5000 --rps 10 --rpc http://127.0.0.1:26657
 
 if [ -z "${LOGS_NOFOLLOW}" ]; then
     echo "**************************************************************************************"

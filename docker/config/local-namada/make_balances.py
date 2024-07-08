@@ -6,6 +6,7 @@ import re
 
 validator_directory = sys.argv[1]
 balances_toml = sys.argv[2]
+self_bond_amount = sys.argv[3]
 
 balances_config = {}
 
@@ -65,26 +66,81 @@ for index, pk in enumerate(pk_array):
   balances_config[key] = {
     'pk': pk
   }
-##############
-output_toml = toml.load(balances_toml)
-ACCOUNT_AMOUNT = "1000000000"
-USER_AMOUNT = "10000"
-FAUCET_AMOUNT = "8123372036854000000"
 
-for entry in balances_config:
-  for token in output_toml['token']:
-    if entry == 'faucet-1':
-      output_toml['token'][token][balances_config[entry]['pk']] = FAUCET_AMOUNT
-    elif entry == 'steward-1':
-      output_toml['token'][token][balances_config[entry]['pk']] = ACCOUNT_AMOUNT
-    elif 'alum' in entry:
-      output_toml['token'][token][balances_config[entry]['pk']] = USER_AMOUNT
-    else:
-      if 'NAM' in token:
-        output_toml['token'][token][balances_config[entry]['pk']] = ACCOUNT_AMOUNT
-        output_toml['token'][token][balances_config[entry]['address']] = ACCOUNT_AMOUNT
-      else:
-        output_toml['token'][token][balances_config[entry]['pk']] = ACCOUNT_AMOUNT
+
+############## NEW WAY ##############
+#ACCOUNT_AMOUNT = "1000000000"
+#USER_AMOUNT = "10000"
+#FAUCET_AMOUNT = "8123372036854000000"
+
+# create an array that has a key for the token and a index for 'faucet-1', 'steward-1', 'alum-0', 'alum-1', etc.
+# as of now there will be 32 accounts for each token in balances.toml
+TOKEN_ALLOCATIONS = {
+    'NAM': {
+        'FAUCET_AMOUNT':  "499710000",            # FAUCET_AMOUNT
+        'ACCOUNT_AMOUNT': f"{self_bond_amount}",  # ACCOUNT_AMOUNT
+        'USER_AMOUNT':    "10000"                 # USER_AMOUNT
+    },
+    'BTC': {
+        'FAUCET_AMOUNT':  "17710000",             # FAUCET_AMOUNT
+        'ACCOUNT_AMOUNT': "1000000",              # ACCOUNT_AMOUNT
+        'USER_AMOUNT':    "10000"                 # USER_AMOUNT
+    },
+    '___': {
+        'FAUCET_AMOUNT':  "499710000",            # FAUCET_AMOUNT
+        'ACCOUNT_AMOUNT': "100000000",            # ACCOUNT_AMOUNT
+      'USER_AMOUNT':      "10000"                 # USER_AMOUNT
+    }
+}
+
+def distribute_balances(output_toml, balances_config):
+    for entry in balances_config:
+        for token in output_toml['token']:
+            if token in TOKEN_ALLOCATIONS:
+                token_key = token
+            else:
+                token_key = '___'                
+
+            if entry == 'faucet-1':
+                output_toml['token'][token][balances_config[entry]['pk']] = TOKEN_ALLOCATIONS[token_key]['FAUCET_AMOUNT']   # FAUCET_AMOUNT
+            elif entry == 'steward-1':
+                output_toml['token'][token][balances_config[entry]['pk']] = TOKEN_ALLOCATIONS[token_key]['ACCOUNT_AMOUNT']  # ACCOUNT_AMOUNT
+            elif 'alum' in entry:
+                output_toml['token'][token][balances_config[entry]['pk']] = TOKEN_ALLOCATIONS[token_key]['USER_AMOUNT']       # USER_AMOUNT
+            else:
+                if 'NAM' in token:
+                    output_toml['token'][token][balances_config[entry]['pk']] = TOKEN_ALLOCATIONS[token_key]['ACCOUNT_AMOUNT'] # ACCOUNT_AMOUNT
+                    output_toml['token'][token][balances_config[entry]['address']] = TOKEN_ALLOCATIONS[token_key]['ACCOUNT_AMOUNT'] # ACCOUNT_AMOUNT
+                else:
+                    output_toml['token'][token][balances_config[entry]['pk']] = TOKEN_ALLOCATIONS[token_key]['ACCOUNT_AMOUNT'] # ACCOUNT_AMOUNT
+    return output_toml
+
+
+output_toml = toml.load(balances_toml)
+output_toml = distribute_balances(output_toml, balances_config)
+
+
+# ############## OLD WAY ##############
+# output_toml = toml.load(balances_toml)
+# ACCOUNT_AMOUNT = "1000000000"
+# USER_AMOUNT = "10000"
+# FAUCET_AMOUNT = "8123372036854000000"
+
+# for entry in balances_config:
+#   for token in output_toml['token']:
+#     if entry == 'faucet-1':
+#       output_toml['token'][token][balances_config[entry]['pk']] = FAUCET_AMOUNT
+#     elif entry == 'steward-1':
+#       output_toml['token'][token][balances_config[entry]['pk']] = ACCOUNT_AMOUNT
+#     elif 'alum' in entry:
+#       output_toml['token'][token][balances_config[entry]['pk']] = USER_AMOUNT
+#     else:
+#       if 'NAM' in token:
+#         output_toml['token'][token][balances_config[entry]['pk']] = ACCOUNT_AMOUNT
+#         output_toml['token'][token][balances_config[entry]['address']] = ACCOUNT_AMOUNT
+#       else:
+#         output_toml['token'][token][balances_config[entry]['pk']] = ACCOUNT_AMOUNT
+# ############## OLD WAY ##############
 
 
 print(toml.dumps(output_toml))

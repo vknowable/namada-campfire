@@ -78,53 +78,88 @@ echo "Done"
 
 
 
-echo "Select the Namada version to use for the new chain, found here: https://github.com/anoma/namada/releases"
-read -p "Enter the Namada version to use for the new chain (eg: v0.39.0): " NAMADA_TAG
-export NAMADA_TAG=$NAMADA_TAG
 
-# check if docker image already exists for that version -- if not build it
-if docker images | grep -q "namada\s*$NAMADA_TAG"; then
-  echo "Image for namada:$NAMADA_TAG found. Continuing..."
-else
-  read -p "Image for namada:$NAMADA_TAG not found. Would you like to build it now? (y/n) " -n 1 -r
-  echo
-  if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-    exit 1
-  else
-    docker build -t namada:$NAMADA_TAG -f $HOME/namada-campfire/docker/container-build/namada/Dockerfile --build-arg NAMADA_TAG=$NAMADA_TAG --build-arg BUILD_WASM=true .
-    echo "Build complete. Continuing..."
-  fi
-fi
 
 
 echo "**************************************************************************************"
 echo "Relaunching validator nodes..."
 echo "**************************************************************************************"
 
-# check for existing .env configuration file
+# check for existing campfire.env file and ask if we want to use it
+export USE_EXISTING_ENV="n"
 if [ -e "$HOME/campfire.env" ]; then
-  echo "Using configuration file $HOME/campfire.env"
-  docker compose -f $HOME/namada-campfire/docker/compose/docker-compose-local-namada.yml --env-file $HOME/campfire.env up -d
-else
-  echo "Could not find expected configuration file $HOME/campfire.env"
-  read -p "Enter the public ip of the server (eg: 142.32.13.100): " EXTIP
-  export EXTIP=$EXTIP
+  source $HOME/campfire.env
+  if [ ! -z "$NAMADA_TAG" ] && [ ! -z "$CHAIN_PREFIX" ] && [ ! -z "$EXTIP" ] && [ ! -z "$P2P_PORT" ] && [ ! -z "$RPC_PORT" ] && [ ! -z "$DOMAIN" ] && [ ! -z "$SELF_BOND_AMT" ] && [ ! -z "$GENESIS_DELAY_MINS" ]; then
+    cat $HOME/campfire.env
+    echo ""
+    read -p "Found existing configuration file $HOME/campfire.env. Do you want to use it? (y/n): " USE_EXISTING_ENV
+  fi
+fi
 
-  read -p "Enter the server domain name (eg: luminara.icu): " DOMAIN
-  export DOMAIN=$DOMAIN
+# check for existing .env configuration file
+if [ "$USE_EXISTING_ENV" = "y" ]; then
+  echo "Using configuration file $HOME/campfire.env"
+  source $HOME/campfire.env
+else
+
+  echo "Let's set up a new configuration file $HOME/campfire.env"
+
+  echo "Select the Namada version to use for the new chain, found here: https://github.com/anoma/namada/releases"
+  read -p "Enter the Namada version to use for the new chain (eg: v0.39.0): " NAMADA_TAG
+  export NAMADA_TAG=$NAMADA_TAG
 
   read -p "Enter the chain-id prefix (eg: luminara): " CHAIN_PREFIX
   export CHAIN_PREFIX=$CHAIN_PREFIX
 
-  # save configuration for next time
-  CONFIG_OUTPUT_FILE="$HOME/campfire.env"
-  echo "EXTIP=$EXTIP" > "$CONFIG_OUTPUT_FILE"
-  echo "DOMAIN=$DOMAIN" >> "$CONFIG_OUTPUT_FILE"
-  echo "CHAIN_PREFIX=$CHAIN_PREFIX" >> "$CONFIG_OUTPUT_FILE"
-  echo "Configuration saved to $CONFIG_OUTPUT_FILE"
+  read -p "Enter the public ip of the server (eg: 142.32.13.100): " EXTIP
+  export EXTIP=$EXTIP
 
-  docker compose -f $HOME/namada-campfire/docker/compose/docker-compose-local-namada.yml -d
+  read -p "Enter the P2P port of the server (eg: 26656): " P2P_PORT
+  export P2P_PORT=$P2P_PORT
+
+  read -p "Enter the RPC port of the server (eg: 26657): " RPC_PORT
+  export RPC_PORT=$RPC_PORT
+
+  read -p "Enter the server domain name (eg: luminara.icu): " DOMAIN
+  export DOMAIN=$DOMAIN
+
+  read -p "Enter the genesis validators self-bond-amount (eg: 1000000000): " SELF_BOND_AMT
+  export SELF_BOND_AMT=$SELF_BOND_AMT
+
+  read -p "Enter the genesis delay time in minutes (eg: 1): " GENESIS_DELAY_MINS
+  export GENESIS_DELAY_MINS=$GENESIS_DELAY_MINS
+
 fi
+
+
+# check if docker image already exists for that version -- if not build it
+if docker images | grep -q "namada\s*$NAMADA_TAG"; then
+  echo "Image for namada:$NAMADA_TAG found. Continuing..."
+else
+  echo "Building image for namada:$NAMADA_TAG..."
+  docker build -t namada:$NAMADA_TAG -f $HOME/namada-campfire/docker/container-build/namada/Dockerfile --build-arg NAMADA_TAG=$NAMADA_TAG --build-arg BUILD_WASM=true .
+  echo "Build complete. Continuing..."
+fi
+
+
+# always save last settings
+# save configuration for next time
+CONFIG_OUTPUT_FILE="$HOME/campfire.env"
+echo "NAMADA_TAG=$NAMADA_TAG" > "$CONFIG_OUTPUT_FILE"
+echo "CHAIN_PREFIX=$CHAIN_PREFIX" >> "$CONFIG_OUTPUT_FILE"
+echo "EXTIP=$EXTIP" >> "$CONFIG_OUTPUT_FILE"
+echo "P2P_PORT=$P2P_PORT" >> "$CONFIG_OUTPUT_FILE"
+echo "RPC_PORT=$RPC_PORT" >> "$CONFIG_OUTPUT_FILE"
+echo "DOMAIN=$DOMAIN" >> "$CONFIG_OUTPUT_FILE"
+echo "SELF_BOND_AMT=$SELF_BOND_AMT" >> "$CONFIG_OUTPUT_FILE"
+echo "GENESIS_DELAY_MINS=$GENESIS_DELAY_MINS" >> "$CONFIG_OUTPUT_FILE"
+
+# with rapport
+echo "Configuration saved to $CONFIG_OUTPUT_FILE"
+
+# always build with .env file
+docker compose -f $HOME/namada-campfire/docker/compose/docker-compose-local-namada.yml --env-file $HOME/campfire.env up -d
+
 
 echo "Validator nodes started."
 echo "Waiting for block 5 before proceeding..."
