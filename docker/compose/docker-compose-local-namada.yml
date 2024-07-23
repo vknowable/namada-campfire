@@ -14,6 +14,7 @@ services:
       - namada-shared:/root/.namada-shared
       - ../config/local-namada/genesis:/genesis:ro
       - ../config/local-namada/make_balances.py:/scripts/make_balances.py
+      - ../config/local-namada/submissions.py:/scripts/submissions.py
       - /usr/share/nginx/html:/output
       - ../config/local-namada/index.html:/index.html
       - ../config/local-namada/words:/root/words
