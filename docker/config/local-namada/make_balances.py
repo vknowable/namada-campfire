@@ -32,16 +32,6 @@ for subdir in os.listdir(validator_directory):
           'pk': transactions_toml['established_account'][0]['public_keys'][0],
         }
 
-#for index, pk in enumerate(pk_array):
-#  key = f"alum-{index}"
-#  balances_config[key] = {
-#    'pk': pk
-#  }
-
-#validator_array = [
-#["tpknam1qzwqar4rydp4nsn4j2xj8hef8jknh3dv7dv99snqd5lfkj8p4pa2vny7cph", "tnam1q9tguf7ppxudvgjpkl5u80el28kyhdxhtspk26hl"], # s4
-#["tpknam1qp87s56pfekaukvs0ernayr7plt4a673sj9pfc7wuj26nsrw567jjfwcx2c", "tnam1qyjjdxmdgnr6r68d6zsacevv27cxy3np8qv8zm2z"], # s3
-#]
 
 for index, val in enumerate(validator_array):
   key = f"val-{index}"
@@ -88,8 +78,6 @@ def distribute_balances(output_toml, balances_config):
                 output_toml['token'][token][balances_config[entry]['pk']] = TOKEN_ALLOCATIONS[token_key]['FAUCET_AMOUNT']   # FAUCET_AMOUNT
             elif entry == 'steward-1':
                 output_toml['token'][token][balances_config[entry]['pk']] = TOKEN_ALLOCATIONS[token_key]['ACCOUNT_AMOUNT']  # ACCOUNT_AMOUNT
-#            elif 'alum' in entry:
-#                output_toml['token'][token][balances_config[entry]['pk']] = TOKEN_ALLOCATIONS[token_key]['USER_AMOUNT']       # USER_AMOUNT
             elif 'val' in entry:
                 if 'NAM' in token:
                     if output_toml.get('token', {}).get(token, {}).get(balances_config[entry].get('pk')) is not None:
@@ -97,14 +85,6 @@ def distribute_balances(output_toml, balances_config):
                     else:
                         output_toml['token'][token][balances_config[entry]['pk']] = TOKEN_ALLOCATIONS[token_key]['VAL_AMOUNT'] # VAL_AMOUNT
                         output_toml['token'][token][balances_config[entry]['address']] = TOKEN_ALLOCATIONS[token_key]['VAL_AMOUNT'] # VAL_AMOUNT
-
-#                    if pk in pk_array:
-#                        output_toml['token'][token][balances_config[entry]['pk']] = TOKEN_ALLOCATIONS[token_key]['USER_AMOUNT'] # VAL_AMOUNT
-#                        output_toml['token'][token][balances_config[entry]['address']] = TOKEN_ALLOCATIONS[token_key]['USER_AMOUNT'] # VAL_AMOUNT
-#                    else:
-#                        output_toml['token'][token][balances_config[entry]['pk']] = TOKEN_ALLOCATIONS[token_key]['VAL_AMOUNT'] # VAL_AMOUNT
-#                        output_toml['token'][token][balances_config[entry]['address']] = TOKEN_ALLOCATIONS[token_key]['VAL_AMOUNT'] # VAL_AMOUNT
-
             # namada-x validators
             else:
                 if 'NAM' in token:
