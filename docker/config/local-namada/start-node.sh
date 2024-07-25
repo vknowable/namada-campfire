@@ -103,6 +103,15 @@ if [ $(hostname) = "namada-1" ]; then
     cat /root/.namada-shared/$STEWARD_ALIAS/transactions.toml >> /root/.namada-shared/genesis/transactions.toml
     cat /root/.namada-shared/$FAUCET_ALIAS/transactions.toml >> /root/.namada-shared/genesis/transactions.toml
 
+#    cat /genesis/submitted/s4-val.toml >> /root/.namada-shared/genesis/transactions.toml
+#    cat /genesis/submitted/s4.toml >> /root/.namada-shared/genesis/transactions.toml
+#    cat /genesis/submitted/s3-val.toml >> /root/.namada-shared/genesis/transactions.toml
+#    cat /genesis/submitted/s2.toml >> /root/.namada-shared/genesis/transactions.toml
+    # append all the submitted transactions.tomls in the 'submitted' directory
+    for file in /genesis/submitted/*; do
+      cat "$file" >> /root/.namada-shared/genesis/transactions.toml
+    done
+
     python3 /scripts/make_balances.py /root/.namada-shared /genesis/balances.toml $SELF_BOND_AMT > /root/.namada-shared/genesis/balances.toml
 
     echo "Genesis balances:"
@@ -112,13 +121,17 @@ if [ $(hostname) = "namada-1" ]; then
     # add steward address to parameters.toml
     sed -i "s#STEWARD_ADDR#$steward_address#g" /root/.namada-shared/genesis/parameters.toml
 
+    # add a random word to the chain prefix for human readability
+    RANDOM_WORD=$(shuf -n 1 /root/words)
+    FULL_PREFIX="${CHAIN_PREFIX}-${RANDOM_WORD}"
+
     GENESIS_TIME=$(date -u -d "+$GENESIS_DELAY_MINS minutes" +"%Y-%m-%dT%H:%M:%S.000000000+00:00")
     INIT_OUTPUT=$(namadac utils init-network \
-      --chain-prefix $CHAIN_PREFIX \
       --genesis-time "$GENESIS_TIME" \
-      --templates-path /root/.namada-shared/genesis \
       --wasm-checksums-path /wasm/checksums.json \
-      --consensus-timeout-commit 10s)
+      --chain-prefix $FULL_PREFIX \
+      --templates-path /root/.namada-shared/genesis \
+      --consensus-timeout-commit 6s)
 
     echo "$INIT_OUTPUT"
     CHAIN_ID=$(echo "$INIT_OUTPUT" \

@@ -1,15 +1,44 @@
 # Genesis token balances to be added here during startup
 
 [token.NAM]
+tpknam1qqkemd52468xud6csxmnr78cu79tt9p0xld6ycg6w59hf5ltndvtx2uhrle = "10000.000000"
+tpknam1qzaqjnqhuapd78l9qalyx0ag08tvpvymr58h53fgazsj0w32p7zfqcp7mla = "10000.000000"
+tpknam1qp87s56pfekaukvs0ernayr7plt4a673sj9pfc7wuj26nsrw567jjfwcx2c = "10000.000000"
+tpknam1qp30h86408kv3zxevervmmjt3d4hrnamxnkptxca7k6qwzzydk2fq8ug4e0 = "10000.000000"
+tnam1q8xysn7n7hzze25gwcnwgmwqp2qja086lcjv27mq = "1337"
 
 [token.BTC]
+tpknam1qqkemd52468xud6csxmnr78cu79tt9p0xld6ycg6w59hf5ltndvtx2uhrle = "10000.000000"
+tpknam1qzaqjnqhuapd78l9qalyx0ag08tvpvymr58h53fgazsj0w32p7zfqcp7mla = "10000.000000"
+tpknam1qp87s56pfekaukvs0ernayr7plt4a673sj9pfc7wuj26nsrw567jjfwcx2c = "10000.000000"
+tpknam1qp30h86408kv3zxevervmmjt3d4hrnamxnkptxca7k6qwzzydk2fq8ug4e0 = "10000.000000"
 
 [token.ETH]
+tpknam1qqkemd52468xud6csxmnr78cu79tt9p0xld6ycg6w59hf5ltndvtx2uhrle = "10000.000000"
+tpknam1qzaqjnqhuapd78l9qalyx0ag08tvpvymr58h53fgazsj0w32p7zfqcp7mla = "10000.000000"
+tpknam1qp87s56pfekaukvs0ernayr7plt4a673sj9pfc7wuj26nsrw567jjfwcx2c = "10000.000000"
+tpknam1qp30h86408kv3zxevervmmjt3d4hrnamxnkptxca7k6qwzzydk2fq8ug4e0 = "10000.000000"
 
 [token.DOT]
+tpknam1qqkemd52468xud6csxmnr78cu79tt9p0xld6ycg6w59hf5ltndvtx2uhrle = "10000.000000"
+tpknam1qzaqjnqhuapd78l9qalyx0ag08tvpvymr58h53fgazsj0w32p7zfqcp7mla = "10000.000000"
+tpknam1qp87s56pfekaukvs0ernayr7plt4a673sj9pfc7wuj26nsrw567jjfwcx2c = "10000.000000"
+tpknam1qp30h86408kv3zxevervmmjt3d4hrnamxnkptxca7k6qwzzydk2fq8ug4e0 = "10000.000000"
 
 [token.Schnitzel]
+tpknam1qqkemd52468xud6csxmnr78cu79tt9p0xld6ycg6w59hf5ltndvtx2uhrle = "10000.000000"
+tpknam1qzaqjnqhuapd78l9qalyx0ag08tvpvymr58h53fgazsj0w32p7zfqcp7mla = "10000.000000"
+tpknam1qp87s56pfekaukvs0ernayr7plt4a673sj9pfc7wuj26nsrw567jjfwcx2c = "10000.000000"
+tpknam1qp30h86408kv3zxevervmmjt3d4hrnamxnkptxca7k6qwzzydk2fq8ug4e0 = "10000.000000"
 
 [token.Apfel]
+tpknam1qqkemd52468xud6csxmnr78cu79tt9p0xld6ycg6w59hf5ltndvtx2uhrle = "10000.000000"
+tpknam1qzaqjnqhuapd78l9qalyx0ag08tvpvymr58h53fgazsj0w32p7zfqcp7mla = "10000.000000"
+tpknam1qp87s56pfekaukvs0ernayr7plt4a673sj9pfc7wuj26nsrw567jjfwcx2c = "10000.000000"
+tpknam1qp30h86408kv3zxevervmmjt3d4hrnamxnkptxca7k6qwzzydk2fq8ug4e0 = "10000.000000"
 
 [token.Kartoffel]
+tpknam1qqkemd52468xud6csxmnr78cu79tt9p0xld6ycg6w59hf5ltndvtx2uhrle = "10000.000000"
+tpknam1qzaqjnqhuapd78l9qalyx0ag08tvpvymr58h53fgazsj0w32p7zfqcp7mla = "10000.000000"
+tpknam1qp87s56pfekaukvs0ernayr7plt4a673sj9pfc7wuj26nsrw567jjfwcx2c = "10000.000000"
+tpknam1qp30h86408kv3zxevervmmjt3d4hrnamxnkptxca7k6qwzzydk2fq8ug4e0 = "10000.000000"

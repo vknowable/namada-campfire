@@ -46,7 +46,7 @@ nam = "0.000001"
 [pos_params]
 # Maximum number of active validators.
 #max_validator_slots = 128
-max_validator_slots = 255
+max_validator_slots = 20
 # Pipeline length (in epochs). Any change in the validator set made in
 # epoch 'n' will become active in epoch 'n + pipeline_len'.
 pipeline_len = 2
