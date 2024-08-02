@@ -66,7 +66,7 @@ sudo sed -i "s/TLD_NAME/$TLD_NAME/g" /etc/nginx/sites-available/default
 sudo ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 
 # test config
-sudo nginx -t
+-sudo nginx -t
 
 # reload nginx
 sudo systemctl reload nginx

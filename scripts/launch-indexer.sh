@@ -11,9 +11,12 @@ cd $HOME/namada-indexer && git fetch --all && git checkout main && git pull
 # prep are vars
 export DATABASE_URL="postgres://postgres:password@postgres:5432/namada-indexer"
 export TENDERMINT_URL="http://172.17.0.1:26657"
-export CHAIN_ID=$(awk -F'=' '/default_chain_id/ {gsub(/[ "]/, "", $2); print $2}' "$HOME/chaindata/namada-1/global-config.toml")
+export FOUND_CHAIN_ID=$(awk -F'=' '/default_chain_id/ {gsub(/[ "]/, "", $2); print $2}' "$HOME/chaindata/namada-1/global-config.toml")
+export CHAIN_ID=${CHAIN_ID:-$FOUND_CHAIN_ID}
 export CACHE_URL="redis://dragonfly:6379"
 export WEBSERVER_PORT="6000"
+
+echo "Proceeding with CHAIN_ID: $CHAIN_ID, TENDERMINT_URL: $TENDERMINT_URL"
 
 
 # update the values for this chain in the docker compose file
@@ -38,8 +41,11 @@ env_file="$HOME/namada-indexer/.env"
 } > "$env_file"
 
 # copy checksums.json
-cp -f $HOME/chaindata/namada-1/$CHAIN_ID/wasm/checksums.json $HOME/namada-indexer/checksums.json
 
+export CAMPFIRE_CHAINDATA=$HOME/chaindata/namada-1/$CHAIN_ID
+export CHAINDATA_PATH=${CHAINDATA_PATH:-$CAMPFIRE_CHAINDATA}
+cp -f $CHAINDATA_PATH/wasm/checksums.json $HOME/namada-indexer/checksums.json
+echo "Copied $CHAINDATA_PATH/wasm/checksums.json"
 
 # bring down any existing volumes
 cd $HOME/namada-indexer
