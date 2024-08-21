@@ -61,15 +61,14 @@ Peer: <span class="bold">PEER</span>
 <span class="bold2">export NAMADA_NETWORK_CONFIGS_SERVER="https://testnet.DOMAIN/configs"</span>
 
 # join network
-<span class="bold2">namadac utils join-network --chain-id CHAIN_ID --dont-prefetch-wasm</span>
+# if your base_dir is not $HOME/.local/share/namada adjust this command accordingly
+<span class="bold2">namadac utils join-network --chain-id CHAIN_ID --wasm-dir $HOME/.local/share/namada/CHAIN_ID/wasm</span>
 
-# download wasm
-<span class="bold2">wget -O - https://testnet.luminara.icu/wasm.tar.gz | tar -xz -C $HOME/.local/share/namada/CHAIN_ID/wasm/ --strip-components=1</span>
-
-# add persistent peer
+# add persistent peer (adjust for base_dir if needed)
 <span class="bold2">sed -i 's#persistent_peers = ".*"#persistent_peers = PEER#' $HOME/.local/share/namada/CHAIN_ID/config.toml</span>
 
 # ...and you're ready to start your node!
+namadan ledger run
 </div>
 </div>
 

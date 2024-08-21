@@ -37,6 +37,7 @@ services:
     restart: unless-stopped
     hostname: namada-2
     image: namada:${NAMADA_TAG}
+#    image: namada:6d3fc90c510a62f9da610ee682db747af9af5d0f
     entrypoint: [ "sh", "/docker-entrypoint-scripts.d/start-node.sh" ]
     volumes:
       - ../config/local-namada/start-node.sh:/docker-entrypoint-scripts.d/start-node.sh

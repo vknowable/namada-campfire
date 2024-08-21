@@ -14,7 +14,7 @@ cp -f $HOME/namada-campfire/docker/container-build/faucet-backend/Dockerfile $HO
 
 # Build
 cd $HOME/namada-faucet
-docker build -t faucet-be:local .
+#docker build -t faucet-be:local .
 
 
 # Tear down any

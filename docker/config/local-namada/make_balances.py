@@ -4,6 +4,7 @@ import toml
 import os
 import re
 from submissions import validator_array
+from genesis_accounts import genesis_account_array
 
 validator_directory = sys.argv[1]
 balances_toml = sys.argv[2]
@@ -27,18 +28,25 @@ for subdir in os.listdir(validator_directory):
           'pk': transactions_toml['established_account'][0]['public_keys'][0],
           'address': transactions_toml['validator_account'][0]['address']
         }
-      else:
-        balances_config[alias] = {
-          'pk': transactions_toml['established_account'][0]['public_keys'][0],
-        }
-
-
-for index, val in enumerate(validator_array):
-  key = f"val-{index}"
+      # else:
+      #   balances_config[alias] = {
+      #     'pk': transactions_toml['established_account'][0]['public_keys'][0],
+      #   }
+      
+# non-validator genesis implicit accounts (typically faucet and steward)
+for index, account in enumerate(genesis_account_array):
+  key = f"{account[0]}"
   balances_config[key] = {
-    'pk': val[0],
-    'address': val[1]
+    'alias': account[0],
+    'address': account[1]
   }
+
+# for index, val in enumerate(validator_array):
+#   key = f"val-{index}"
+#   balances_config[key] = {
+#     'pk': val[0],
+#     'address': val[1]
+#   }
 
 ############## NEW WAY ##############
 #ACCOUNT_AMOUNT = "1000000000"
@@ -74,10 +82,14 @@ def distribute_balances(output_toml, balances_config):
             else:
                 token_key = '___'                
 
+            # if entry == 'faucet-1':
+            #     output_toml['token'][token][balances_config[entry]['pk']] = TOKEN_ALLOCATIONS[token_key]['FAUCET_AMOUNT']   # FAUCET_AMOUNT
+            # elif entry == 'steward-1':
+            #     output_toml['token'][token][balances_config[entry]['pk']] = TOKEN_ALLOCATIONS[token_key]['ACCOUNT_AMOUNT']  # ACCOUNT_AMOUNT
             if entry == 'faucet-1':
-                output_toml['token'][token][balances_config[entry]['pk']] = TOKEN_ALLOCATIONS[token_key]['FAUCET_AMOUNT']   # FAUCET_AMOUNT
+                output_toml['token'][token][balances_config[entry]['address']] = TOKEN_ALLOCATIONS[token_key]['FAUCET_AMOUNT']   # FAUCET_AMOUNT
             elif entry == 'steward-1':
-                output_toml['token'][token][balances_config[entry]['pk']] = TOKEN_ALLOCATIONS[token_key]['ACCOUNT_AMOUNT']  # ACCOUNT_AMOUNT
+                output_toml['token'][token][balances_config[entry]['address']] = TOKEN_ALLOCATIONS[token_key]['ACCOUNT_AMOUNT']  # ACCOUNT_AMOUNT
             elif 'val' in entry:
                 if 'NAM' in token:
                     if output_toml.get('token', {}).get(token, {}).get(balances_config[entry].get('pk')) is not None:
@@ -88,10 +100,11 @@ def distribute_balances(output_toml, balances_config):
             # namada-x validators
             else:
                 if 'NAM' in token:
-                    output_toml['token'][token][balances_config[entry]['pk']] = TOKEN_ALLOCATIONS[token_key]['ACCOUNT_AMOUNT'] # ACCOUNT_AMOUNT
+                    # output_toml['token'][token][balances_config[entry]['pk']] = TOKEN_ALLOCATIONS[token_key]['ACCOUNT_AMOUNT'] # ACCOUNT_AMOUNT
                     output_toml['token'][token][balances_config[entry]['address']] = TOKEN_ALLOCATIONS[token_key]['ACCOUNT_AMOUNT'] # ACCOUNT_AMOUNT
                 else:
-                    output_toml['token'][token][balances_config[entry]['pk']] = TOKEN_ALLOCATIONS[token_key]['ACCOUNT_AMOUNT'] # ACCOUNT_AMOUNT
+                    # output_toml['token'][token][balances_config[entry]['pk']] = TOKEN_ALLOCATIONS[token_key]['ACCOUNT_AMOUNT'] # ACCOUNT_AMOUNT
+                    output_toml['token'][token][balances_config[entry]['address']] = TOKEN_ALLOCATIONS[token_key]['ACCOUNT_AMOUNT'] # ACCOUNT_AMOUNT
     return output_toml
 
 

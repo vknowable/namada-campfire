@@ -52,7 +52,6 @@ if [ $(hostname) = "namada-1" ]; then
 
   if [ ! -f "/root/.namada-shared/chain.config" ]; then
     # wait until all validator configs have been written
-    # while [ ! -d "/root/.namada-shared/namada-1" ] || [ ! -d "/root/.namada-shared/namada-2" ] || [ ! -d "/root/.namada-shared/namada-3" ]; do
     while [ ! -d "/root/.namada-shared/namada-1" ] || [ ! -d "/root/.namada-shared/namada-3" ]; do
       echo "Validator configs not ready. Sleeping for 5s..."
       sleep 5
@@ -69,6 +68,7 @@ if [ $(hostname) = "namada-1" ]; then
       --aliases $STEWARD_ALIAS)
     echo $est_output
     steward_address=$(echo $est_output | grep -o 'tnam[[:alnum:]]*')
+    # steward_address=$(grep -A1 "\[addresses\]" /root/.local/share/namada/pre-genesis/wallet.toml | grep $STEWARD_ALIAS | awk -F' = ' '{print $2}' | tr -d '"')
     namadac utils sign-genesis-txs \
       --path "/root/.namada-shared/$STEWARD_ALIAS/unsigned-transactions.toml" \
       --output "/root/.namada-shared/$STEWARD_ALIAS/transactions.toml"
@@ -82,11 +82,18 @@ if [ $(hostname) = "namada-1" ]; then
       --path "/root/.namada-shared/$FAUCET_ALIAS/unsigned-transactions.toml" \
       --aliases $FAUCET_ALIAS)
     echo $est_output
-    faucet_address=$(echo $est_output | grep -o 'tnam[[:alnum:]]*')
+    # faucet_address=$(echo $est_output | grep -o 'tnam[[:alnum:]]*')
+    faucet_address=$(grep -A1 "\[addresses\]" /root/.local/share/namada/pre-genesis/wallet.toml | grep $FAUCET_ALIAS | awk -F' = ' '{print $2}' | tr -d '"')
     namadac utils sign-genesis-txs \
       --path "/root/.namada-shared/$FAUCET_ALIAS/unsigned-transactions.toml" \
       --output "/root/.namada-shared/$FAUCET_ALIAS/transactions.toml"
     rm -rf /root/.namada-shared/$FAUCET_ALIAS/unsigned-transactions.toml
+
+    # since 0.43.0, balances.toml needs the tnam instead of tpknam. so write those to a file for later
+    echo "genesis_account_array = [
+      ['steward-1', '$steward_address',],
+      ['faucet-1', '$faucet_address',]
+    ]" > /scripts/genesis_accounts.py
 
     # create directory for genesis toml files
     mkdir -p /root/.namada-shared/genesis
@@ -98,17 +105,13 @@ if [ $(hostname) = "namada-1" ]; then
     # add genesis transactions to transactions.toml
     # TODO: move to python script
     cat /root/.namada-shared/namada-1/transactions.toml >> /root/.namada-shared/genesis/transactions.toml
-    # cat /root/.namada-shared/namada-2/transactions.toml >> /root/.namada-shared/genesis/transactions.toml
     cat /root/.namada-shared/namada-3/transactions.toml >> /root/.namada-shared/genesis/transactions.toml
     cat /root/.namada-shared/$STEWARD_ALIAS/transactions.toml >> /root/.namada-shared/genesis/transactions.toml
     cat /root/.namada-shared/$FAUCET_ALIAS/transactions.toml >> /root/.namada-shared/genesis/transactions.toml
 
-#    cat /genesis/submitted/s4-val.toml >> /root/.namada-shared/genesis/transactions.toml
-#    cat /genesis/submitted/s4.toml >> /root/.namada-shared/genesis/transactions.toml
-#    cat /genesis/submitted/s3-val.toml >> /root/.namada-shared/genesis/transactions.toml
-#    cat /genesis/submitted/s2.toml >> /root/.namada-shared/genesis/transactions.toml
     # append all the submitted transactions.tomls in the 'submitted' directory
     for file in /genesis/submitted/*; do
+      echo "" >> /root/.namada-shared/genesis/transactions.toml # ensure newline
       cat "$file" >> /root/.namada-shared/genesis/transactions.toml
     done
 
@@ -129,9 +132,10 @@ if [ $(hostname) = "namada-1" ]; then
     INIT_OUTPUT=$(namadac utils init-network \
       --genesis-time "$GENESIS_TIME" \
       --wasm-checksums-path /wasm/checksums.json \
+      --wasm-dir /wasm \
       --chain-prefix $FULL_PREFIX \
       --templates-path /root/.namada-shared/genesis \
-      --consensus-timeout-commit 6s)
+      --consensus-timeout-commit 8s)
 
     echo "$INIT_OUTPUT"
     CHAIN_ID=$(echo "$INIT_OUTPUT" \
@@ -183,23 +187,19 @@ if [ ! -d "/root/.local/share/namada/$CHAIN_ID/db" ] || [ -z "$(ls -A /root/.loc
   # namada-2 is not a validator
   if [ $(hostname) = "namada-2" ]; then
     namada client utils join-network \
-      --chain-id $CHAIN_ID --dont-prefetch-wasm --add-persistent-peers
+      --chain-id $CHAIN_ID --add-persistent-peers
   else
     namada client utils join-network \
-      --chain-id $CHAIN_ID --genesis-validator $ALIAS --dont-prefetch-wasm --add-persistent-peers
+      --chain-id $CHAIN_ID --genesis-validator $ALIAS --add-persistent-peers
   fi
-
-  # copy wasm to namada dir
-  cp -a /wasm/*.wasm /root/.local/share/namada/$CHAIN_ID/wasm
-  cp -a /wasm/checksums.json /root/.local/share/namada/$CHAIN_ID/wasm
 
   # configure namada-1 node to advertise host public ip to outside peers if provided
   EXTIP=${EXTIP:-''}
   if [ -n "$EXTIP" ]; then
   echo "Advertising public ip $EXTIP"
-    sed -i "s#external_address = \".*\"#external_address = \"$EXTIP:${P2P_PORT:-26656}\"#g" /root/.local/share/namada/$CHAIN_ID/config.toml
     ## modified for public facing nginx
     namada node ledger run-until --block-height 0 --halt
+    sed -i "s#external_address = \".*\"#external_address = \"$EXTIP:${P2P_PORT:-26656}\"#g" /root/.local/share/namada/$CHAIN_ID/config.toml
     NODE_ID=$(cometbft show-node-id --home $HOME/.local/share/namada/$CHAIN_ID/cometbft/ | awk '{last_line = $0} END {print last_line}')
     rm -f /output/*.tar.gz
     cp /*.tar.gz /output
