@@ -22,14 +22,14 @@ sudo chown 1000:1000 $NAMADA_DIR
 ### 3. Download the Docker image from the GitHub container registry
 We'll assume you're using the Docker image from [here](https://github.com/anoma/namada/pkgs/container/namada) in the following steps. Pull the image for whichever version of Namada is being used for the current testnet (you can find which version you need by checking the Campfire [landing page](https://testnet.luminara.icu)).
 ```bash copy
-NAMADA_VERSION=v0.39.0 # or whichever version you wish to download
-docker pull ghcr.io/anoma/namada:namada-$NAMADA_VERSION
+NAMADA_VERSION=v0.43.0 # or whichever version you wish to download
+docker pull ghcr.io/anoma/namada:$NAMADA_VERSION
 ```
-In this case, the full name of the downloaded image is `ghcr.io/anoma/namada:namada-v0.39.0`.  
+In this case, the full name of the downloaded image is `ghcr.io/anoma/namada:v0.43.0`.  
 
 We can save the image name to a shell variable for convenience:
 ```bash copy
-export DOCKER_IMAGE=ghcr.io/anoma/namada:namada-$NAMADA_VERSION
+export DOCKER_IMAGE=ghcr.io/anoma/namada:v0.43.0
 ```
 
 ### 4. Get the current chain-id
@@ -41,16 +41,10 @@ CHAIN_ID={chain-id-here}
 ### 5. Initialize your node (`join-network`)
 This command will run `join-network` using the data directory we created in the first step:
 ```bash copy
-docker run --rm -P -i -e NAMADA_NETWORK_CONFIGS_SERVER="https://testnet.luminara.icu/configs" -v $NAMADA_DIR:/home/namada/.local/share/namada -t $DOCKER_IMAGE client utils join-network --chain-id $CHAIN_ID --dont-prefetch-wasm
+docker run --rm -P -i -e NAMADA_NETWORK_CONFIGS_SERVER="https://testnet.luminara.icu/configs" -v $NAMADA_DIR:/home/namada/.local/share/namada -t $DOCKER_IMAGE client utils join-network --chain-id $CHAIN_ID --wasm-dir /home/namada/.local/share/namada/$CHAIN_ID/wasm
 ```
 
-### 6. Download the chain WASM files
-Download and extract the wasm files from the link on the [landing page](https://testnet.luminara.icu):
-```bash copy
-wget -O - https://testnet.luminara.icu/wasm.tar.gz | tar -xz -C $NAMADA_DIR/$CHAIN_ID/wasm/ --strip-components=1
-```
-
-### 7. Add `persistent_peers`
+### 6. Add `persistent_peers`
 Find the persistent peer address on the [landing page](https://testnet.luminara.icu) and add it to your node's config file:  
 *Note: below is an example value; yours will be slightly different*
 ```bash copy
@@ -58,7 +52,7 @@ Find the persistent peer address on the [landing page](https://testnet.luminara.
 persistent_peers = "tcp://af427e348cd45dd7308be4ea58f1492098e057b8@143.198.36.225:26656"
 ```
 
-### 8. Start the node
+### 7. Start the node
 In this command we are naming our container `namada` for easy reference later, but you can choose a different name.  
 
 This command will start the node:
@@ -76,7 +70,7 @@ You should see entries to indicate new blocks are being indexed, similar to:
 2024-06-28T13:38:15.442871Z  INFO namada_node::shell: Committed block hash: d958f287c38dbeb94e07dfb8290c9c620753157510ff1d46899925def0df0b99, height: 798
 ```
 
-### 9. (Optional) Use a snapshot for faster syncing
+### 8. (Optional) Use a snapshot for faster syncing
 Rather than syncing your node from the first block, you can use a snapshot taken from a recent block height. The [landing page](https://testnet.luminara.icu) will have a download link to a recent snapshot in `tar.lz4` format.  
 
 To apply the snapshot:
@@ -119,7 +113,7 @@ rm -rf ~/namada-temp
 rm {filename}.tar.lz4
 ```
 
-### 10. (Optional) Become a validator
+### 9. (Optional) Become a validator
 **Note:** Detailed instructions can be found in the [Post Genesis Validators](https://docs.namada.net/operators/validators/validator-setup#post-genesis-validators) section of the Namada Docs.  
 
 1. Before initializing your validator, you must have a full node that is fully synced to the head of the chain.
