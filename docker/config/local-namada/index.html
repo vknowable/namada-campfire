@@ -1,40 +1,90 @@
-<html><head><title>Luminara Campfire Testnet</title></head><body><pre>
+<html>
+  <style>
+    body {
+      background-color: #333;
+      color: #ddd;
+      letter-spacing: 0.5;
+      overflow: auto;
+    }
+    a {
+      color: #aa0;
+    }
+    a:visited {
+      color: #770;
+    }
+    .bold {
+      font-weight: bold;
+      color: #0dd;
+    }
+    .bold2 {
+      font-weight: bold;
+      color: #eee;
+    }
+    .light-bg {
+      background-color: #535345;
+      padding: 15px;
+      margin-top: 10px;
+      border: 1px solid #fbfb32;
+      display: inline-block;
+    }
+    .commands {
+      background-color: #555;
+      border: 1px solid #aaa;
+      padding: 5px;
+      width: auto;
+    }
+    .title {
+      color: #f55;
+    }
+  </style>
+<head><title>Housefire Testnet</title></head><body><pre>
+<div class="title">
+  _   _                                 __   _               
+ | | | |   ___    _   _   ___    ___   / _| (_)  _ __    ___ 
+ | |_| |  / _ \  | | | | / __|  / _ \ | |_  | | | '__|  / _ \
+ |  _  | | (_) | | |_| | \__ \ |  __/ |  _| | | | |    |  __/
+ |_| |_|  \___/   \__,_| |___/  \___| |_|   |_| |_|     \___|
+                                                            
+</div>
 
-  _                            _                                     _____                                __   _
- | |                          (_)                                   / ____|                              / _| (_)
- | |       _   _   _ __ ___    _   _ __     __ _   _ __    __ _    | |        __ _   _ __ ___    _ __   | |_   _   _ __    ___
- | |      | | | | | '_ ` _ \  | | | '_ \   / _` | | '__|  / _` |   | |       / _` | | '_ ` _ \  | '_ \  |  _| | | | '__|  / _ \
- | |____  | |_| | | | | | | | | | | | | | | (_| | | |    | (_| |   | |____  | (_| | | | | | | | | |_) | | |   | | | |    |  __/
- |______|  \__,_| |_| |_| |_| |_| |_| |_|  \__,_| |_|     \__,_|    \_____|  \__,_| |_| |_| |_| | .__/  |_|   |_| |_|     \___|
-                                                                                                | |
-                                                                                                |_|
+<h3>LUMINARA "HOUSEFIRE" NAMADA TESTNET</h3>
+
+Chain id: <span class="bold">CHAIN_ID</span>
+Version: <span class="bold">NAMADA_TAG</span>
+Purpose: <span class="bold">Burner testnet</span>
+Peer: <span class="bold">PEER</span>
+
+<div class="light-bg">
+<h3>Commands to join:</h3>
+<div class="commands">
+# set custom configs server
+<span class="bold2">export NAMADA_NETWORK_CONFIGS_SERVER="https://testnet.DOMAIN/configs"</span>
+
+# join network
+# if your base_dir is not $HOME/.local/share/namada adjust this command accordingly
+<span class="bold2">namadac utils join-network --chain-id CHAIN_ID --wasm-dir $HOME/.local/share/namada/CHAIN_ID/wasm</span>
+
+# add persistent peer (adjust for base_dir if needed)
+<span class="bold2">sed -i 's#persistent_peers = ".*"#persistent_peers = PEER#' $HOME/.local/share/namada/CHAIN_ID/config.toml</span>
+
+# ...and you're ready to start your node!
+namadan ledger run
+</div>
+</div>
 
 
-LUMINARA "CAMPFIRE" NAMADA TESTNET
-
-Chain id: CHAIN_ID
-Version: NAMADA_TAG
-Purpose: Short-term testnet
-Peer: PEER
-
-Commands to join:
-export NAMADA_NETWORK_CONFIGS_SERVER="https://testnet.DOMAIN/configs"
-namadac utils join-network --chain-id CHAIN_ID --dont-prefetch-wasm
-
-...and then download the chain wasm from the link below and place inside your 'wasm' folder, and add the persistent peer above to your config.toml
-
-How to join/More info: <a href="https://luminara-campfire.gitbook.io/campfire">Campfire Homepage/Docs</a>
+How to join/More info: <a href="https://knowabl.notion.site/Housefire-2-Shielded-Boogaloo-burner-net-0a0d670d5dad412ea5715fcc97b9433d">Housefire homepage (Notion)</a>
 Chain config .env: <a href="https://testnet.DOMAIN/CHAIN_PREFIX.env">https://testnet.DOMAIN/CHAIN_PREFIX.env</a>
 Namada Config tar.gz: <a href="https://testnet.DOMAIN/CHAIN_ID.tar.gz">https://testnet.DOMAIN/CHAIN_ID.tar.gz</a>
 Wasm tar.gz: <a href="https://testnet.DOMAIN/wasm.tar.gz">https://testnet.DOMAIN/wasm.tar.gz</a>
 Snapshot: <a href="#">Download</a>
 <br>
-Explorer: <a href="https://explorer.DOMAIN">https://explorer.DOMAIN</a>
-Interface: <a href="https://interface.DOMAIN">https://interface.DOMAIN</a>
+Explorer (coming soon): <a href="https://explorer.DOMAIN">https://explorer.DOMAIN</a>
+Interface (coming soon): <a href="https://interface.DOMAIN">https://interface.DOMAIN</a>
 RPC: <a href="https://rpc.DOMAIN">https://rpc.DOMAIN</a>
 Faucet: <a href="https://faucet.DOMAIN">https://faucet.DOMAIN</a>
-Indexer: <a href="https://indexer.DOMAIN/block/last">https://indexer.DOMAIN/block/last</a>
-(see <a href="https://github.com/Zondax/namadexer/blob/main/docs/04-server.md">https://github.com/Zondax/namadexer/blob/main/docs/04-server.md</a> for list of indexer endpoints)
+Indexer: <a href="https://indexer.DOMAIN/api/v1/pos/validator/all">https://indexer.DOMAIN/api/v1/pos/validator/all</a>
+(See: <a href="https://github.com/anoma/namada-indexer/blob/main/swagger.yml">https://github.com/anoma/namada-indexer/blob/main/swagger.yml</a> for list of endpoints.)
 
 
 ----

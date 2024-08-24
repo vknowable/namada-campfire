@@ -23,26 +23,9 @@ There are also Docker images available [here](https://hub.docker.com/r/spork666/
 export NAMADA_NETWORK_CONFIGS_SERVER="https://testnet.luminara.icu/configs"
 ```
 3. Next, fetch the genesis files:  
-*Note: the flag `--dont-prefetch-wasm` is important*
+*Note: the flag `--dont-prefetch-wasm` is no longer needed post v0.43.0; instead you must provide the directory where the wasm files will be stored*
 ```bash copy
-namadac utils join-network --chain-id $CHAIN_ID --dont-prefetch-wasm
-```
-
-### 3. Download the chain WASM files
-1. Download and extract the wasm files from the link on the [landing page](https://testnet.luminara.icu):
-```bash copy
-wget https://testnet.luminara.icu/wasm.tar.gz
-tar -xf wasm.tar.gz
-```
-2. Place the wasm files in your node's chain data directory:
-```bash copy
-cd wasm
-cp ./* ~/.local/share/namada/$CHAIN_ID/wasm
-```
-
-(You can instead use the following command to do this in a single step)
-```bash copy
-wget -O - https://testnet.luminara.icu/wasm.tar.gz | tar -xz -C ~/.local/share/namada/$CHAIN_ID/wasm --strip-components=1
+namadac utils join-network --chain-id $CHAIN_ID --wasm-dir $HOME/.local/share/namada/$CHAIN_ID/wasm
 ```
 
 ### 3. Add `persistent_peers`

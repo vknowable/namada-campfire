@@ -1,0 +1,96 @@
+<html>
+  <style>
+    body {
+      background-color: #333;
+      color: #ddd;
+      letter-spacing: 0.5;
+      overflow: auto;
+    }
+    a {
+      color: #aa0;
+    }
+    a:visited {
+      color: #770;
+    }
+    .bold {
+      font-weight: bold;
+      color: #0dd;
+    }
+    .bold2 {
+      font-weight: bold;
+      color: #eee;
+    }
+    .light-bg {
+      background-color: #535345;
+      padding: 15px;
+      margin-top: 10px;
+      border: 1px solid #fbfb32;
+      display: inline-block;
+    }
+    .commands {
+      background-color: #555;
+      border: 1px solid #aaa;
+      padding: 5px;
+      width: auto;
+    }
+    .title {
+      color: #f55;
+    }
+  </style>
+<head><title>Housefire Testnet</title></head><body><pre>
+<div class="title">
+  _   _                                 __   _               
+ | | | |   ___    _   _   ___    ___   / _| (_)  _ __    ___ 
+ | |_| |  / _ \  | | | | / __|  / _ \ | |_  | | | '__|  / _ \
+ |  _  | | (_) | | |_| | \__ \ |  __/ |  _| | | | |    |  __/
+ |_| |_|  \___/   \__,_| |___/  \___| |_|   |_| |_|     \___|
+                                                            
+</div>
+
+<h3>LUMINARA "HOUSEFIRE" NAMADA TESTNET</h3>
+
+Chain id: <span class="bold">CHAIN_ID</span>
+Version: <span class="bold">NAMADA_TAG</span>
+Purpose: <span class="bold">Burner testnet</span>
+Peer: <span class="bold">PEER</span>
+
+<div class="light-bg">
+<h3>Commands to join:</h3>
+<div class="commands">
+# set custom configs server
+<span class="bold2">export NAMADA_NETWORK_CONFIGS_SERVER="https://testnet.DOMAIN/configs"</span>
+
+# join network
+# if your base_dir is not $HOME/.local/share/namada adjust this command accordingly
+<span class="bold2">namadac utils join-network --chain-id CHAIN_ID --wasm-dir $HOME/.local/share/namada/CHAIN_ID/wasm</span>
+
+# add persistent peer (adjust for base_dir if needed)
+<span class="bold2">sed -i 's#persistent_peers = ".*"#persistent_peers = PEER#' $HOME/.local/share/namada/CHAIN_ID/config.toml</span>
+
+# ...and you're ready to start your node!
+namadan ledger run
+</div>
+</div>
+
+
+How to join/More info: <a href="https://knowabl.notion.site/Housefire-2-Shielded-Boogaloo-burner-net-0a0d670d5dad412ea5715fcc97b9433d">Housefire homepage (Notion)</a>
+Chain config .env: <a href="https://testnet.DOMAIN/CHAIN_PREFIX.env">https://testnet.DOMAIN/CHAIN_PREFIX.env</a>
+Namada Config tar.gz: <a href="https://testnet.DOMAIN/CHAIN_ID.tar.gz">https://testnet.DOMAIN/CHAIN_ID.tar.gz</a>
+Wasm tar.gz: <a href="https://testnet.DOMAIN/wasm.tar.gz">https://testnet.DOMAIN/wasm.tar.gz</a>
+Snapshot: <a href="#">Download</a>
+<br>
+Explorer (coming soon): <a href="https://explorer.DOMAIN">https://explorer.DOMAIN</a>
+Interface (coming soon): <a href="https://interface.DOMAIN">https://interface.DOMAIN</a>
+RPC: <a href="https://rpc.DOMAIN">https://rpc.DOMAIN</a>
+Faucet: <a href="https://faucet.DOMAIN">https://faucet.DOMAIN</a>
+Indexer (coming soon): <a href="https://indexer.DOMAIN/health">https://indexer.DOMAIN/health</a>
+
+
+----
+Links:
+<ul>
+<li><a href="https://docs.namada.net">https://docs.namada.net</a></li>
+<li><a href="https://luminara.icu">https://luminara.icu</a></li>
+<li><a href="https://knowable.vc">https://knowable.vc</a></li>
+</ul>
+</pre></body></html>
