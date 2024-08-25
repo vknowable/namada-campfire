@@ -12,14 +12,15 @@ git clone -b campfire-faucet https://github.com/vknowable/namada-faucet.git
 cp -f $HOME/namada-campfire/docker/container-build/faucet-backend/Dockerfile $HOME/namada-faucet/Dockerfile    
 
 
-# Build
-cd $HOME/namada-faucet
-#docker build -t faucet-be:local .
-
-
 # Tear down any
 docker stop $(docker container ls --all | grep 'faucet-be' | awk '{print $1}')
-docker container rm --force $(docker container ls --all | grep 'faucet-be' | awk '{print $1}')
+if [ -z "${LOGS_NOFOLLOW}" ]; then
+    docker container rm --force $(docker container ls --all | grep 'faucet-be' | awk '{print $1}')
+fi
+
+# Build
+cd $HOME/namada-faucet
+docker build -t faucet-be:local .
 
 
 # Fetch the faucet private key
