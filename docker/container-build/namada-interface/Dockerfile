@@ -20,6 +20,8 @@ COPY . .
 
 # copy the .env file
 COPY apps/namadillo/.env /root/namada-interface/apps/namadillo/.env
+COPY docker/namadillo.config.toml /root/namada-interface/docker/namadillo.config.toml
+
 
 # build
 RUN yarn
