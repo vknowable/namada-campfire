@@ -26,7 +26,7 @@ Peer: PEER
 
 Commands to join:
 export NAMADA_NETWORK_CONFIGS_SERVER="https://testnet.DOMAIN/configs"
-namadac utils join-network --chain-id CHAIN_ID --dont-prefetch-wasm
+namadac utils join-network --chain-id CHAIN_ID --wasm-dir $HOME/.local/share/namada/CHAIN_ID/wasm
 
 ...and then download the chain wasm from the link below and place inside your 'wasm' folder, and add the persistent peer above to your config.toml
 
@@ -36,12 +36,12 @@ Namada Config tar.gz: <a href="https://testnet.DOMAIN/CHAIN_ID.tar.gz">https://t
 Wasm tar.gz: <a href="https://testnet.DOMAIN/wasm.tar.gz">https://testnet.DOMAIN/wasm.tar.gz</a>
 Snapshot: <a href="#">Download</a>
 <br>
-Explorer: <a href="https://explorer.DOMAIN">https://explorer.DOMAIN</a>
-Interface: <a href="https://interface.DOMAIN">https://interface.DOMAIN</a>
+Explorer (coming soon): <a href="https://explorer.DOMAIN">https://explorer.DOMAIN</a>
+Interface (coming soon): <a href="https://interface.DOMAIN">https://interface.DOMAIN</a>
 RPC: <a href="https://rpc.DOMAIN">https://rpc.DOMAIN</a>
 Faucet: <a href="https://faucet.DOMAIN">https://faucet.DOMAIN</a>
-Indexer: <a href="https://indexer.DOMAIN/block/last">https://indexer.DOMAIN/block/last</a>
-(see <a href="https://github.com/Zondax/namadexer/blob/main/docs/04-server.md">https://github.com/Zondax/namadexer/blob/main/docs/04-server.md</a> for list of indexer endpoints)
+Indexer: <a href="https://indexer.DOMAIN/api/v1/pos/validator/all">https://indexer.DOMAIN/api/v1/pos/validator/all</a>
+(See: <a href="https://github.com/anoma/namada-indexer/blob/main/swagger.yml">https://github.com/anoma/namada-indexer/blob/main/swagger.yml</a> for list of endpoints.)
 
 
 ----
