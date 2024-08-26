@@ -48,6 +48,15 @@ env_file="$REPO_DIR/$INTERFACE_DIR/.env"
 } > "$env_file"
 
 
+# This is a template file for Namadillo config.
+# Rename this file to namadillo.config.toml (removing the initial dot) in order to copy it into the Docker container
+#indexer_url = ""
+#rpc_url = ""
+cp -f $REPO_DIR/docker/.namadillo.config.toml $REPO_DIR/docker/namadillo.config.toml
+echo "indexer_url = \"https://indexer.$DOMAIN:443\"" >> $REPO_DIR/docker/namadillo.config.toml
+echo "rpc_url = \"https://rpc.$DOMAIN:443\"" >> $REPO_DIR/docker/namadillo.config.toml
+
+
 # tear down
 docker stop $(docker container ls --all | grep 'interface' | awk '{print $1}')
 docker container rm --force $(docker container ls --all | grep 'interface' | awk '{print $1}')
