@@ -47,13 +47,13 @@ done
 
 if ! [[ $# -eq 1 && $1 == "-y" ]]; then
   echo "**************************************************************************************"
-  echo "Should we wipe and rebuild all namada component images (namada, faucet, interface)?"
+  echo "Should we wipe and rebuild all namada component images (namada, faucet, interface, indexer)?"
   echo "**************************************************************************************"
   read -p "This is not necessary, but would you like to wipe these component images? (y/n) " -n 1 -r
   echo
   if [[ $REPLY =~ [Yy]$ ]]; then
     
-    namada_containers=("interface" "faucet-" "namada")
+    namada_containers=("interface" "faucet-" "namada" "indexer")
 
     for image in "${namada_containers[@]}"; do
       image_ids=$(docker image ls --all | grep "$image" | awk '{print $3}')
