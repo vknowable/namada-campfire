@@ -25,10 +25,13 @@ Purpose: Short-term testnet
 Peer: PEER
 
 Commands to join:
+
 export NAMADA_NETWORK_CONFIGS_SERVER="https://testnet.DOMAIN/configs"
+
 namadac utils join-network --chain-id CHAIN_ID --wasm-dir $HOME/.local/share/namada/CHAIN_ID/wasm
 
-...and then download the chain wasm from the link below and place inside your 'wasm' folder, and add the persistent peer above to your config.toml
+# add persistent peer (adjust for base_dir if needed)
+<span class="bold2">sed -i 's#persistent_peers = ".*"#persistent_peers = PEER#' $HOME/.local/share/namada/CHAIN_ID/config.toml</span>
 
 How to join/More info: <a href="https://luminara-campfire.gitbook.io/campfire">Campfire Homepage/Docs</a>
 Chain config .env: <a href="https://testnet.DOMAIN/CHAIN_PREFIX.env">https://testnet.DOMAIN/CHAIN_PREFIX.env</a>
@@ -37,7 +40,7 @@ Wasm tar.gz: <a href="https://testnet.DOMAIN/wasm.tar.gz">https://testnet.DOMAIN
 Snapshot: <a href="#">Download</a>
 <br>
 Explorer (coming soon): <a href="https://explorer.DOMAIN">https://explorer.DOMAIN</a>
-Interface (coming soon): <a href="https://interface.DOMAIN">https://interface.DOMAIN</a>
+Interface: <a href="https://interface.DOMAIN">https://interface.DOMAIN</a>
 RPC: <a href="https://rpc.DOMAIN">https://rpc.DOMAIN</a>
 Faucet: <a href="https://faucet.DOMAIN">https://faucet.DOMAIN</a>
 Indexer: <a href="https://indexer.DOMAIN/api/v1/pos/validator/all">https://indexer.DOMAIN/api/v1/pos/validator/all</a>
