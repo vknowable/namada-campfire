@@ -6,6 +6,7 @@ rm -rf ~/namada-indexer
 cd ~
 git clone -b main https://github.com/anoma/namada-indexer.git
 cd $HOME/namada-indexer && git fetch --all && git checkout main && git pull
+#cd $HOME/namada-indexer && git fetch --all && git checkout chore/update-namada-to-0.43.0 && git pull
 
 
 # prep are vars
@@ -38,6 +39,7 @@ env_file="$HOME/namada-indexer/.env"
     echo "CHAIN_ID=\"$CHAIN_ID\""
     echo "CACHE_URL=\"$CACHE_URL\""
     echo "WEBSERVER_PORT=\"$WEBSERVER_PORT\""
+    echo "PORT=\"$WEBSERVER_PORT\""
 } > "$env_file"
 
 # copy checksums.json
