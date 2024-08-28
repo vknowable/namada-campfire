@@ -3,8 +3,8 @@
 ### Grab the repo
 rm -rf $HOME/namada-faucet
 cd $HOME
-#git clone -b master https://github.com/heliaxdev/namada-faucet
-git clone -b campfire-faucet https://github.com/vknowable/namada-faucet.git
+git clone -b master https://github.com/heliaxdev/namada-faucet
+#git clone -b campfire-faucet https://github.com/vknowable/namada-faucet.git
 #git clone -b campfire-faucet https://github.com/sirouk/namada-faucet.git
 
 
