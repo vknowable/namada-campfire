@@ -49,6 +49,14 @@ export CHAINDATA_PATH=${CHAINDATA_PATH:-$CAMPFIRE_CHAINDATA}
 cp -f $CHAINDATA_PATH/wasm/checksums.json $HOME/namada-indexer/checksums.json
 echo "Copied $CHAINDATA_PATH/wasm/checksums.json"
 
+
+# restart node with read_past_height_limit adjustment
+sed -i 's#^read_past_height_limit = .*#read_past_height_limit = 360000#' $CHAINDATA_PATH/config.toml
+# echo output about the change and restart
+echo "Changed read_past_height_limit to 360000 in $CHAINDATA_PATH/config.toml, restarting node..."
+docker container restart compose-namada-1-1
+
+
 # bring down any existing volumes
 cd $HOME/namada-indexer
 
