@@ -18,14 +18,35 @@ if [ -z "${LOGS_NOFOLLOW}" ]; then
     docker container rm --force $(docker container ls --all | grep 'faucet-be' | awk '{print $1}')
 fi
 
-# Build
-cd $HOME/namada-faucet
-docker build -t faucet-be:local .
-
 
 # Fetch the faucet private key
 export CHAIN_ID=$(awk -F'=' '/default_chain_id/ {gsub(/[ "]/, "", $2); print $2}' "$HOME/chaindata/namada-1/global-config.toml")
 export FAUCET_PK=$(awk '/\[secret_keys\]/ {found=1} found && /faucet-1 = / {gsub(/.*= "/, ""); sub(/"$/, ""); sub(/unencrypted:/, ""); print; exit}' "$HOME/chaindata/namada-1/$CHAIN_ID/wallet.toml")
+
+
+# to get our $DOMAIN
+source $HOME/campfire.env
+
+# write env file
+env_file=$HOME/namada-faucet/.env
+{
+
+    echo "PORT=5000"
+    echo "DIFFICULTY=3"
+    echo "PRIVATE_KEY=$FAUCET_PK"
+    echo "CHAIN_START=1"
+    echo "CHAIN_ID=$CHAIN_ID"
+    echo "RPC=http://127.0.0.1:26657"
+    echo "WITHDRAW_LIMIT=1000"
+    #echo "AUTH_KEY=my_auth_key"
+    echo "RPS=10"
+
+} > "$env_file"
+
+
+# Build
+cd $HOME/namada-faucet
+docker build -t faucet-be:local .
 
 
 # Start the faucet backend
