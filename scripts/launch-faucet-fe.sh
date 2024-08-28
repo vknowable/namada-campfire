@@ -3,7 +3,8 @@
 ### Grab the repo
 rm -rf $HOME/namada-interface
 cd $HOME
-git clone -b v0.1.0-0e77e71 https://github.com/anoma/namada-interface.git
+#git clone -b v0.1.0-0e77e71 https://github.com/anoma/namada-interface.git
+git clone -b main https://github.com/anoma/namada-interface.git
 #git clone -b main https://github.com/anoma/namada-interface.git
 
 
