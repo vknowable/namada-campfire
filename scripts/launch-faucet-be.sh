@@ -32,7 +32,7 @@ env_file=$HOME/namada-faucet/.env
 {
 
     echo "PORT=5000"
-    echo "DIFFICULTY=3"
+    echo "DIFFICULTY=1"
     echo "PRIVATE_KEY=$FAUCET_PK"
     echo "CHAIN_START=1"
     echo "CHAIN_ID=$CHAIN_ID"
@@ -52,7 +52,7 @@ docker build -t faucet-be:local .
 # Start the faucet backend
 cd $HOME/namada-faucet
 #docker run --name faucet-be -d --network host faucet-be:local ./server --cargo-env development --difficulty 3 --private-key $FAUCET_PK --chain-start 1 --chain-id $CHAIN_ID --port 5000 --rps 10 --rpc http://127.0.0.1:26657
-docker run --name faucet-be -d --network host faucet-be:local ./server --difficulty 3 --private-key $FAUCET_PK --chain-start 1 --chain-id $CHAIN_ID --port 5000 --rps 10 --rpc http://127.0.0.1:26657
+docker run --name faucet-be -d --network host faucet-be:local ./server --difficulty 1 --private-key $FAUCET_PK --chain-start 1 --chain-id $CHAIN_ID --port 5000 --rps 10 --rpc http://127.0.0.1:26657
 
 if [ -z "${LOGS_NOFOLLOW}" ]; then
     echo "**************************************************************************************"

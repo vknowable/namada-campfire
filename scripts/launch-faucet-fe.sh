@@ -5,7 +5,6 @@ rm -rf $HOME/namada-interface
 cd $HOME
 #git clone -b v0.1.0-0e77e71 https://github.com/anoma/namada-interface.git
 git clone -b main https://github.com/anoma/namada-interface.git
-#git clone -b main https://github.com/anoma/namada-interface.git
 
 
 # Copy over the files for docker and nginx
@@ -26,24 +25,34 @@ source $HOME/campfire.env
 env_file=$HOME/namada-interface/apps/faucet/.env
 {
 
-    # # for main branch:
+    # for v0.1.0-0e77e71: as documented in: namada-campfire/docker/container-build/faucet-frontend/README.md
+    echo "REACT_APP_FAUCET_API_URL=https://api.faucet.$DOMAIN"
+    echo "REACT_APP_FAUCET_API_ENDPOINT=/api/v1/faucet"
+    echo "REACT_APP_FAUCET_LIMIT=1000"
+    echo "REACT_APP_TOKEN_NAM=$NAM"
+
+    # for main branch:
     echo "NAMADA_INTERFACE_FAUCET_API_URL=https://api.faucet.$DOMAIN"
     echo "NAMADA_INTERFACE_FAUCET_API_ENDPOINT=/api/v1/faucet"
     echo "NAMADA_INTERFACE_FAUCET_LIMIT=1000"
     echo "NAMADA_INTERFACE_PROXY_PORT=9000"
     echo "NAMADA_INTERFACE_NAMADA_TOKEN=$NAM"
 
-    # as documented in: namada-campfire/docker/container-build/faucet-frontend/README.md
-    # echo "REACT_APP_FAUCET_API_URL=https://api.faucet.$DOMAIN"
-    # echo "REACT_APP_FAUCET_API_ENDPOINT=/api/v1/faucet"
-    # echo "REACT_APP_FAUCET_LIMIT=1000"
-    # echo "REACT_APP_TOKEN_NAM=$NAM"
-
 } > "$env_file"
 
 
 # source the env before building
 source $env_file
+
+
+# This is a template file for Namadillo config.
+# Rename this file to namadillo.config.toml (removing the initial dot) in order to copy it into the Docker container
+#indexer_url = ""
+#rpc_url = ""
+cp -f $HOME/namada-interface/docker/.namadillo.config.toml $HOME/namada-interface/docker/namadillo.config.toml
+echo "indexer_url = \"https://indexer.$DOMAIN:443\"" >> $HOME/namada-interface/docker/namadillo.config.toml
+echo "rpc_url = \"https://rpc.$DOMAIN:443\"" >> $HOME/namada-interface/docker/namadillo.config.toml
+
 
 # Tear down any conatiners, remove them and their images
 docker stop $(docker container ls --all | grep 'faucet-fe' | awk '{print $1}')
