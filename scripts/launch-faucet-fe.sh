@@ -37,6 +37,11 @@ env_file=$HOME/namada-interface/apps/faucet/.env
     echo "NAMADA_INTERFACE_FAUCET_LIMIT=1000"
     echo "NAMADA_INTERFACE_PROXY_PORT=9000"
     echo "NAMADA_INTERFACE_NAMADA_TOKEN=$NAM"
+    
+    # for main branch:
+    echo "INDEXER_URL=https://indexer.$DOMAIN:443"
+    echo "RPC_URL=https://rpc.$DOMAIN:443"
+    echo "CHAIN_ID=$CHAIN_ID"
 
 } > "$env_file"
 
