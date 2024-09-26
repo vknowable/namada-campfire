@@ -52,19 +52,19 @@ config_file="$REPO_DIR/$INTERFACE_DIR/public/config.toml"
 } > "$config_file"
 
 # tear down
-docker stop $(docker container ls --all | grep 'interface' | awk '{print $1}')
-docker container rm --force $(docker container ls --all | grep 'interface' | awk '{print $1}')
-if [ -z "${LOGS_NOFOLLOW}" ]; then
-    docker image rm --force $(docker image ls --all | grep 'interface' | awk '{print $3}')
-fi
+#docker stop $(docker container ls --all | grep 'interface' | awk '{print $1}')
+#docker container rm --force $(docker container ls --all | grep 'interface' | awk '{print $1}')
+#if [ -z "${LOGS_NOFOLLOW}" ]; then
+#    docker image rm --force $(docker image ls --all | grep 'interface' | awk '{print $3}')
+#fi
 
 # build and run
-docker build -f $REPO_DIR/Dockerfile-interface -t interface:local $REPO_DIR
-docker run --name interface -d -p "3000:80" interface:local
+docker build -f $REPO_DIR/Dockerfile-interface -t interface:latest-main $REPO_DIR
+#docker run --name interface -d -p "3000:80" interface:local
 
 
-if [ -z "${LOGS_NOFOLLOW}" ]; then
-    echo "**************************************************************************************"
-    echo "Following interface logs, feel free to press Ctrl+C to exit!"
-    docker logs -f $(docker container ls --all | grep interface | awk '{print $1}')
-fi
+#if [ -z "${LOGS_NOFOLLOW}" ]; then
+#    echo "**************************************************************************************"
+#    echo "Following interface logs, feel free to press Ctrl+C to exit!"
+#    docker logs -f $(docker container ls --all | grep interface | awk '{print $1}')
+#fi
