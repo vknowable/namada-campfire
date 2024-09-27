@@ -125,9 +125,19 @@ if [ $(hostname) = "namada-1" ]; then
     # add steward address to parameters.toml
     sed -i "s#STEWARD_ADDR#$steward_address#g" /root/.namada-shared/genesis/parameters.toml
 
+    # extract the tx and vp checksums from the checksums.json file
+    TX_CHECKSUMS=$(jq -r 'to_entries[] | select(.key | startswith("tx")) | .value' /wasm/checksums.json | sed 's/.*\.\(.*\)\..*/"\1"/' | paste -sd "," -)
+    VP_CHECKSUMS=$(jq -r 'to_entries[] | select(.key | startswith("vp")) | .value' /wasm/checksums.json | sed 's/.*\.\(.*\)\..*/"\1"/' | paste -sd "," -)
+
+    # add them to parameters.toml whitelist
+    sed -i "s#tx_whitelist = \[\]#tx_whitelist = [$TX_CHECKSUMS]#" ~/.namada-shared/genesis/parameters.toml
+    sed -i "s#vp_whitelist = \[\]#vp_whitelist = [$VP_CHECKSUMS]#" ~/.namada-shared/genesis/parameters.toml
+
     # add a random word to the chain prefix for human readability
     RANDOM_WORD=$(shuf -n 1 /root/words)
     FULL_PREFIX="${CHAIN_PREFIX}-${RANDOM_WORD}"
+
+    # create the chain configs
     GENESIS_TIME=$(date -u -d "+$GENESIS_DELAY_MINS minutes" +"%Y-%m-%dT%H:%M:%S.000000000+00:00")
     INIT_OUTPUT=$(namadac utils init-network \
       --genesis-time "$GENESIS_TIME" \
