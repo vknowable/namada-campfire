@@ -53,27 +53,4 @@ if [ -z "${LOGS_NOFOLLOW}" ]; then
 fi
 
 # build and start the containers
-#docker compose -f docker-compose.yml up --env-file $HOME/namada-indexer/.env -d
 docker compose -f $HOME/namada-indexer/docker-compose.yml --env-file $HOME/namada-indexer/.env up -d
-
-
-
-
-
-### OLD namadexer
-
-
-# cd $HOME/namadexer/contrib && docker compose down --volumes
-
-# # create new config file
-# sed -i "s#^tendermint_addr = \".*\"#tendermint_addr = \"$TENDERMINT_URL\"#" "$HOME/namadexer/config/Settings.toml"
-# cp -f $HOME/namadexer/config/Settings.example.toml $HOME/namadexer/config/Settings.toml
-# sed -i '0,/^host = \".*\"/s//host = "postgres"/' "$HOME/namadexer/config/Settings.toml"
-# sed -i "s#^chain_name = \".*\"#chain_name = \"$CHAIN_PREFIX\"#" "$HOME/namadexer/config/Settings.toml"
-# sed -i "s#^tendermint_addr = \".*\"#tendermint_addr = \"$TENDERMINT_URL\"#" "$HOME/namadexer/config/Settings.toml"
-
-# # copy checksums.json
-# cp -f $HOME/chaindata/namada-1/$CHAIN_ID/wasm/checksums.json $HOME/namadexer/contrib/checksums.json
-
-# # launch
-# cd $HOME/namadexer/contrib && docker compose up -d

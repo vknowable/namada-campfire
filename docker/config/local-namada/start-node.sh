@@ -12,6 +12,7 @@ cleanup() {
 
 export PUBLIC_IP=$(ip a | grep -oE 'inet ([0-9]{1,3}\.){3}[0-9]{1,3}/[0-9]{1,2} brd ([0-9]{1,3}\.){3}[0-9]{1,3}' | grep -v '127.0.0.1' | awk '{print $2}' | cut -d '/' -f1)
 export ALIAS=$(hostname)
+export NAMADA_GENESIS_TX_CHAIN_ID="housefire"
 
 if [ ! -f "/root/.namada-shared/chain.config" ]; then
   if [ $(hostname) = "namada-1" ] || [ $(hostname) = "namada-3" ]; then
@@ -127,7 +128,6 @@ if [ $(hostname) = "namada-1" ]; then
     # add a random word to the chain prefix for human readability
     RANDOM_WORD=$(shuf -n 1 /root/words)
     FULL_PREFIX="${CHAIN_PREFIX}-${RANDOM_WORD}"
-
     GENESIS_TIME=$(date -u -d "+$GENESIS_DELAY_MINS minutes" +"%Y-%m-%dT%H:%M:%S.000000000+00:00")
     INIT_OUTPUT=$(namadac utils init-network \
       --genesis-time "$GENESIS_TIME" \

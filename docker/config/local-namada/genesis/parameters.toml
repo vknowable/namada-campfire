@@ -28,9 +28,9 @@ pos_gain_d = "0.1"
 # Maximum number of signature per transaction
 max_signatures_per_transaction = 15
 # Max gas for block
-max_block_gas = 20000000
+max_block_gas = 25_000_000
 # Masp fee payment gas limit
-masp_fee_payment_gas_limit = 20000
+masp_fee_payment_gas_limit = 250_000
 # Fee unshielding gas limit
 fee_unshielding_gas_limit = 20000
 # Fee unshielding descriptions limit
