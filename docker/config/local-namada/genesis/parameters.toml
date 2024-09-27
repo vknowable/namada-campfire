@@ -132,6 +132,6 @@ maximum_number_of_stewards = 5
 # IBC parameters
 [ibc_params]
 # default mint limit of each token
-default_mint_limit = "100000"
+default_mint_limit = "10000000"
 # default per-epoch throughput limit of each token
 default_per_epoch_throughput_limit = "100000"
