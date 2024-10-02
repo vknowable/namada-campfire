@@ -199,8 +199,8 @@ if ! [[ $# -eq 1 && $1 == "-y" ]]; then
     $HOME/namada-campfire/scripts/launch-faucet-fe.sh
     
     # on housefire, relaunch these manually since they are updated frequently
-    # $HOME/namada-campfire/scripts/launch-indexer.sh
-    # $HOME/namada-campfire/scripts/launch-interface.sh
+    $HOME/namada-campfire/scripts/launch-indexer.sh
+    $HOME/namada-campfire/scripts/launch-interface.sh
   fi
 fi
 
