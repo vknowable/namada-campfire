@@ -12,7 +12,7 @@ cleanup() {
 
 export PUBLIC_IP=$(ip a | grep -oE 'inet ([0-9]{1,3}\.){3}[0-9]{1,3}/[0-9]{1,2} brd ([0-9]{1,3}\.){3}[0-9]{1,3}' | grep -v '127.0.0.1' | awk '{print $2}' | cut -d '/' -f1)
 export ALIAS=$(hostname)
-
+export NAMADA_GENESIS_TX_CHAIN_ID="$CHAIN_PREFIX"
 
 if [ ! -f "/root/.namada-shared/chain.config" ]; then
   if [ $(hostname) = "namada-1" ] || [ $(hostname) = "namada-3" ]; then
@@ -182,7 +182,6 @@ fi
 ############ all nodes resume here ############
 
 export CHAIN_ID=$(awk 'NR==2' /root/.namada-shared/chain.config)
-export NAMADA_GENESIS_TX_CHAIN_ID="$CHAIN_ID"
 
 # on first start only, perform additional setup:
 if [ ! -d "/root/.local/share/namada/$CHAIN_ID/db" ] || [ -z "$(ls -A /root/.local/share/namada/$CHAIN_ID/db)" ]; then
