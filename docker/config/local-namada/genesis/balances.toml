@@ -1,6 +1,9 @@
+# source: https://github.com/heliaxdev/namada-network-templates/blob/fraccaman/housefire-campfire/devnet/campfire/balances.toml
+
 # Genesis token balances to be added here during startup
 
 [token.NAM]
+# NOTE: Campfire launch script default bond for validator trio is 100000000 
 # this always needs to be present for our tooling to work
 tnam1qz4u7j7dkxj5wv9xuwy2qemaeeqd450ysgl7pq0r = "1000000000"
 
