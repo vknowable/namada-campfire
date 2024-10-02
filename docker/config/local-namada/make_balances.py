@@ -116,7 +116,8 @@ def distribute_balances(output_toml, balances_config):
                     output_toml['token'][token][balances_config[entry]['address']] = TOKEN_ALLOCATIONS[token_key]['ACCOUNT_AMOUNT'] # ACCOUNT_AMOUNT
 
     # for housefire -- give this address a balance for testing purposes
-    output_toml['token']['NAM']['tnam1qz4u7j7dkxj5wv9xuwy2qemaeeqd450ysgl7pq0r'] = '10000'
+    output_toml['token']['NAM']['tnam1qz4u7j7dkxj5wv9xuwy2qemaeeqd450ysgl7pq0r'] = '1000000000'
+    
     return output_toml
 
 

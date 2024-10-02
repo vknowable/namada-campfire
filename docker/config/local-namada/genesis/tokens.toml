@@ -1,3 +1,5 @@
+# source: https://github.com/heliaxdev/namada-network-templates/blob/fraccaman/housefire-campfire/devnet/campfire/tokens.toml
+
 # Token accounts with their validity predicates
 
 [token.NAM]
