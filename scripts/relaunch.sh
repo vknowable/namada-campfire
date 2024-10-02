@@ -53,7 +53,7 @@ if ! [[ $# -eq 1 && $1 == "-y" ]]; then
   echo
   if [[ $REPLY =~ [Yy]$ ]]; then
     
-    namada_containers=("interface" "faucet-" "namada" "indexer")
+    namada_containers=("interface" "faucet" "namada" "indexer")
 
     for image in "${namada_containers[@]}"; do
       image_ids=$(docker image ls --all | grep "$image" | awk '{print $3}')
