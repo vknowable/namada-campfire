@@ -26,7 +26,7 @@ echo "**************************************************************************
 echo "Stopping and removing:"
 
 
-namada_containers=("interface" "namada-indexer" "faucet-" "compose-namada-")
+namada_containers=("interface" "namada-indexer" "faucet" "compose-namada-")
 
 for container in "${namada_containers[@]}"; do
 
