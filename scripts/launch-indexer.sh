@@ -4,9 +4,11 @@
 # Grab the repo
 rm -rf ~/namada-indexer
 cd ~
-git clone -b main https://github.com/anoma/namada-indexer.git
-cd $HOME/namada-indexer && git fetch --all && git checkout main && git pull
+#git clone -b main https://github.com/anoma/namada-indexer.git
+git clone -b patch-2 https://github.com/sirouk/namada-indexer.git
+#cd $HOME/namada-indexer && git fetch --all && git checkout main && git pull
 #cd $HOME/namada-indexer && git fetch --all && git checkout chore/update-namada-to-0.43.0 && git pull
+cd $HOME/namada-indexer && git fetch --all && git checkout patch-2 && git pull
 
 
 # prep are vars
@@ -74,6 +76,6 @@ if [ -z "${LOGS_NOFOLLOW}" ]; then
 fi
 
 # build and start the containers
-#docker compose -f $HOME/namada-indexer/docker-compose.yml --env-file $HOME/namada-indexer/.env up -d
-cargo install just
-just docker-up
+#cargo install just
+#just docker-up
+docker compose -f $HOME/namada-indexer/docker-compose.yml --env-file $HOME/namada-indexer/.env up -d
