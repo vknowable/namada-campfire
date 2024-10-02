@@ -38,12 +38,12 @@ for index, account in enumerate(genesis_account_array):
   }
 
 # uncomment this if you want to add pregenesis validators to submissions.py
-# for index, val in enumerate(validator_array):
-#   key = f"val-{index}"
-#   balances_config[key] = {
-#     'pk': val[0],
-#     'address': val[1]
-#   }
+for index, val in enumerate(validator_array):
+  key = f"val-{index}"
+  balances_config[key] = {
+    'pk': val[0],
+    'address': val[1]
+  }
 
 # create an array that has a key for the token and a index for 'faucet-1', 'steward-1', 'alum-0', 'alum-1', etc.
 # as of now there will be 32 accounts for each token in balances.toml
