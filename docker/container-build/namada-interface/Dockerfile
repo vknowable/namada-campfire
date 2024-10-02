@@ -31,4 +31,4 @@ COPY ./docker/namadillo/nginx.conf /etc/nginx/conf.d/default.conf
 COPY ./apps/namadillo/public/config.toml[l] /usr/share/nginx/html/config.toml
 #COPY --chmod=0755 ./docker/namadillo/bootstrap_config.sh /docker-entrypoint.d/bootstrap_config.sh
 
-RUN chown nginx:nginx /docker-entrypoint.d/bootstrap_config.sh
+#RUN chown nginx:nginx /docker-entrypoint.d/bootstrap_config.sh
