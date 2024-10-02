@@ -8,7 +8,7 @@ git clone -b main https://github.com/anoma/namada-interface.git
 
 
 # Copy over the files for docker and nginx
-cp -f $HOME/namada-campfire/docker/container-build/faucet-frontend/Dockerfile $HOME/namada-interface/Dockerfile    
+cp -f $HOME/namada-campfire/docker/container-build/faucet-frontend/Dockerfile $HOME/namada-interface/Dockerfile
 mkdir -p $HOME/namada-interface/apps/faucet/docker
 cp -f $HOME/namada-campfire/docker/container-build/faucet-frontend/nginx.conf $HOME/namada-interface/apps/faucet/docker/nginx.conf
 
