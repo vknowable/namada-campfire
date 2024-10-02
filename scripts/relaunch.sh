@@ -53,9 +53,9 @@ if ! [[ $# -eq 1 && $1 == "-y" ]]; then
   echo
   if [[ $REPLY =~ [Yy]$ ]]; then
     
-    namada_containers=("interface" "faucet" "namada" "indexer")
+    namada_images=("interface" "faucet" "namada" "indexer" "postgres" "redis")
 
-    for image in "${namada_containers[@]}"; do
+    for image in "${namada_images[@]}"; do
       image_ids=$(docker image ls --all | grep "$image" | awk '{print $3}')
       if [ -n "$image_ids" ]; then
         echo "Removing images: '$image'..."
