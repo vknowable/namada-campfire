@@ -1,6 +1,17 @@
 # Genesis token balances to be added here during startup
 
-
 [token.NAM]
 # this always needs to be present for our tooling to work
 tnam1qz4u7j7dkxj5wv9xuwy2qemaeeqd450ysgl7pq0r = "1000000000"
+
+[token.BTC]
+
+[token.ETH]
+
+[token.DOT]
+
+[token.Schnitzel]
+
+[token.Apfel]
+
+[token.Kartoffel]
