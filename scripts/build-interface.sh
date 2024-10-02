@@ -18,13 +18,10 @@ cp -f $HOME/namada-campfire/docker/container-build/namada-interface/Dockerfile $
 cp -f $HOME/namada-campfire/docker/container-build/namada-interface/nginx.conf $REPO_DIR/nginx.conf
 
 
-export CAMPFIRE_CHAIN_DATA="$HOME/chaindata/namada-1"
-export CHAIN_DATA=${CHAIN_DATA:-$CAMPFIRE_CHAIN_DATA}
 
-
-export CHAIN_ID=$(awk -F'=' '/default_chain_id/ {gsub(/[ "]/, "", $2); print $2}' "$CHAIN_DATA/global-config.toml")
-export NAM=$(awk '/\[addresses\]/ {found=1} found && /nam = / {gsub(/.*= "/, ""); sub(/"$/, ""); print; exit}' "$CHAIN_DATA/$CHAIN_ID/wallet.toml")
-export FAUCET_ADDRESS=$(awk '/\[addresses\]/ {found=1} found && /faucet-1 = / {gsub(/.*= "/, ""); sub(/"$/, ""); sub(/unencrypted:/, ""); print; exit}' "$CHAIN_DATA/$CHAIN_ID/wallet.toml")
+export CHAIN_ID=$(awk -F'=' '/default_chain_id/ {gsub(/[ "]/, "", $2); print $2}' "$HOME/chaindata/namada-1/global-config.toml")
+export NAM=$(awk '/\[addresses\]/ {found=1} found && /nam = / {gsub(/.*= "/, ""); sub(/"$/, ""); print; exit}' "$HOME/chaindata/namada-1/$CHAIN_ID/wallet.toml")
+export FAUCET_ADDRESS=$(awk '/\[addresses\]/ {found=1} found && /faucet-1 = / {gsub(/.*= "/, ""); sub(/"$/, ""); sub(/unencrypted:/, ""); print; exit}' "$HOME/chaindata/namada-1/$CHAIN_ID/wallet.toml")
 
 source $HOME/campfire.env
 
@@ -47,31 +44,27 @@ env_file="$REPO_DIR/$INTERFACE_DIR/.env"
 
 } > "$env_file"
 
-# This was the template file for Namadillo config.
-#cp -f $REPO_DIR/docker/.namadillo.config.toml $REPO_DIR/docker/namadillo.config.toml
-
-# This is the template file for Namadillo config.
 # write config file
 config_file="$REPO_DIR/$INTERFACE_DIR/public/config.toml"
 {
-    echo 'indexer_url = "https://indexer.$DOMAIN:443"'
-    echo 'rpc_url = "https://rpc.$DOMAIN:443"'
+    echo 'indexer_url = "https://indexer.knowable.run:443"'
+    echo 'rpc_url = "https://rpc.knowable.run:443"'
 } > "$config_file"
 
 # tear down
-docker stop $(docker container ls --all | grep 'interface' | awk '{print $1}')
-docker container rm --force $(docker container ls --all | grep 'interface' | awk '{print $1}')
-if [ -z "${LOGS_NOFOLLOW}" ]; then
-    docker image rm --force $(docker image ls --all | grep 'interface' | awk '{print $3}')
-fi
+#docker stop $(docker container ls --all | grep 'interface' | awk '{print $1}')
+#docker container rm --force $(docker container ls --all | grep 'interface' | awk '{print $1}')
+#if [ -z "${LOGS_NOFOLLOW}" ]; then
+#    docker image rm --force $(docker image ls --all | grep 'interface' | awk '{print $3}')
+#fi
 
 # build and run
-docker build -f $REPO_DIR/Dockerfile-interface -t interface:local $REPO_DIR
-docker run --name interface -d -p "3000:80" interface:local
+docker build -f $REPO_DIR/Dockerfile-interface -t interface:latest-main $REPO_DIR
+#docker run --name interface -d -p "3000:80" interface:local
 
 
-if [ -z "${LOGS_NOFOLLOW}" ]; then
-    echo "**************************************************************************************"
-    echo "Following interface logs, feel free to press Ctrl+C to exit!"
-    docker logs -f $(docker container ls --all | grep interface | awk '{print $1}')
-fi
+#if [ -z "${LOGS_NOFOLLOW}" ]; then
+#    echo "**************************************************************************************"
+#    echo "Following interface logs, feel free to press Ctrl+C to exit!"
+#    docker logs -f $(docker container ls --all | grep interface | awk '{print $1}')
+#fi

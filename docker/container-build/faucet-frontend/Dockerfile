@@ -1,4 +1,4 @@
-FROM node:18.17.1-alpine AS build-env
+FROM node:22-alpine AS build-env
 
 # install dependencies
 ENV PACKAGES add git python3 alpine-sdk clang pkgconfig openssl-dev protoc protobuf-dev build-base curl
@@ -18,9 +18,14 @@ COPY . .
 # copy the .env file
 COPY apps/faucet/.env /root/namada-interface/apps/faucet/.env
 
+WORKDIR /root/namada-interface
+#RUN yarn install
+
 # build `shared` package
 WORKDIR /root/namada-interface/packages/shared
+RUN yarn add typescript
 RUN yarn
+#RUN yarn global add typescript
 RUN cargo install -f wasm-bindgen-cli
 RUN yarn wasm:build
 
