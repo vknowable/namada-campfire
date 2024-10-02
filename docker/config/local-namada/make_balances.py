@@ -37,7 +37,7 @@ for index, account in enumerate(genesis_account_array):
     'address': account[1]
   }
 
-# uncomment this if you want to add pregenesis validators to submissions.py
+# add pregenesis validators to submissions.py
 for index, val in enumerate(validator_array):
   key = f"val-{index}"
   balances_config[key] = {
