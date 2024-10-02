@@ -9,8 +9,10 @@ INTERFACE_DIR="apps/namadillo"
 ### Grab the repo
 rm -rf ~/namada-interface
 cd ~
+#git clone -b v0.1.0-0e77e71 https://github.com/anoma/namada-interface.git
 git clone -b main https://github.com/anoma/namada-interface.git
 
+#cd $HOME/namada-interface && git checkout 1ed4d1285ffbf654c84a80353537023ba98e0614
 cd $HOME/namada-interface && git fetch --all && git checkout main && git pull
 cp -f $HOME/namada-campfire/docker/container-build/namada-interface/Dockerfile $REPO_DIR/Dockerfile-interface
 cp -f $HOME/namada-campfire/docker/container-build/namada-interface/nginx.conf $REPO_DIR/nginx.conf
