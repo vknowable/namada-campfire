@@ -26,7 +26,7 @@ echo "**************************************************************************
 echo "Stopping and removing:"
 
 
-namada_containers=("interface" "namada-indexer" "faucet-" "compose-namada-")
+namada_containers=("interface" "namada-indexer" "faucet" "compose-namada-")
 
 for container in "${namada_containers[@]}"; do
 
@@ -53,9 +53,9 @@ if ! [[ $# -eq 1 && $1 == "-y" ]]; then
   echo
   if [[ $REPLY =~ [Yy]$ ]]; then
     
-    namada_containers=("interface" "faucet-" "namada" "indexer")
+    namada_images=("interface" "faucet" "namada" "indexer" "postgres" "redis")
 
-    for image in "${namada_containers[@]}"; do
+    for image in "${namada_images[@]}"; do
       image_ids=$(docker image ls --all | grep "$image" | awk '{print $3}')
       if [ -n "$image_ids" ]; then
         echo "Removing images: '$image'..."
@@ -197,8 +197,10 @@ if ! [[ $# -eq 1 && $1 == "-y" ]]; then
     export LOGS_NOFOLLOW=true
     $HOME/namada-campfire/scripts/launch-faucet-be.sh
     $HOME/namada-campfire/scripts/launch-faucet-fe.sh
-    # $HOME/namada-campfire/scripts/launch-indexer.sh
-    # $HOME/namada-campfire/scripts/launch-interface.sh
+    
+    # on housefire, relaunch these manually since they are updated frequently
+    $HOME/namada-campfire/scripts/launch-indexer.sh
+    $HOME/namada-campfire/scripts/launch-interface.sh
   fi
 fi
 

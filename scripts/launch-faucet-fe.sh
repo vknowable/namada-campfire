@@ -3,12 +3,12 @@
 ### Grab the repo
 rm -rf $HOME/namada-interface
 cd $HOME
-git clone -b v0.1.0-0e77e71 https://github.com/anoma/namada-interface.git
-#git clone -b main https://github.com/anoma/namada-interface.git
+#git clone -b v0.1.0-0e77e71 https://github.com/anoma/namada-interface.git
+git clone -b main https://github.com/anoma/namada-interface.git
 
 
 # Copy over the files for docker and nginx
-cp -f $HOME/namada-campfire/docker/container-build/faucet-frontend/Dockerfile $HOME/namada-interface/Dockerfile    
+cp -f $HOME/namada-campfire/docker/container-build/faucet-frontend/Dockerfile $HOME/namada-interface/Dockerfile
 mkdir -p $HOME/namada-interface/apps/faucet/docker
 cp -f $HOME/namada-campfire/docker/container-build/faucet-frontend/nginx.conf $HOME/namada-interface/apps/faucet/docker/nginx.conf
 
@@ -24,30 +24,31 @@ source $HOME/campfire.env
 # write env file
 env_file=$HOME/namada-interface/apps/faucet/.env
 {
-    # # for this branch: v0.1.0-0e77e71
-    # echo "REACT_APP_FAUCET_API_ENDPOINT=https://api.faucet.$DOMAIN"
+
+    # for v0.1.0-0e77e71: as documented in: namada-campfire/docker/container-build/faucet-frontend/README.md
+    # echo "REACT_APP_FAUCET_API_URL=https://api.faucet.$DOMAIN"
     # echo "REACT_APP_FAUCET_API_ENDPOINT=/api/v1/faucet"
     # echo "REACT_APP_FAUCET_LIMIT=1000"
     # echo "REACT_APP_TOKEN_NAM=$NAM"
 
-    # # for main branch as of: commit 570f068
-    # echo "NAMADA_INTERFACE_FAUCET_API_URL=https://api.faucet.$DOMAIN"
-    # echo "NAMADA_INTERFACE_FAUCET_API_ENDPOINT=/api/v1/faucet"
+    # for main branch:
+    echo "NAMADA_INTERFACE_FAUCET_API_URL=https://api.faucet.$DOMAIN"
+    echo "NAMADA_INTERFACE_FAUCET_API_ENDPOINT=/api/v1/faucet"
     # echo "NAMADA_INTERFACE_FAUCET_LIMIT=1000"
-    # #echo "NAMADA_INTERFACE_PROXY_PORT=9000"
+    # echo "NAMADA_INTERFACE_PROXY_PORT=9000"
     # echo "NAMADA_INTERFACE_NAMADA_TOKEN=$NAM"
-
-    # as documented in: namada-campfire/docker/container-build/faucet-frontend/README.md
-    echo "REACT_APP_FAUCET_API_URL=https://api.faucet.$DOMAIN"
-    echo "REACT_APP_FAUCET_API_ENDPOINT=/api/v1/faucet"
-    echo "REACT_APP_FAUCET_LIMIT=1000"
-    echo "REACT_APP_TOKEN_NAM=$NAM"
+    
+    # # for main branch:
+    # echo "INDEXER_URL=https://indexer.$DOMAIN:443"
+    # echo "RPC_URL=https://rpc.$DOMAIN:443"
+    # echo "CHAIN_ID=$CHAIN_ID"
 
 } > "$env_file"
 
 
 # source the env before building
 source $env_file
+
 
 # Tear down any conatiners, remove them and their images
 docker stop $(docker container ls --all | grep 'faucet-fe' | awk '{print $1}')

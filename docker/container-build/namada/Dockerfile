@@ -37,7 +37,7 @@ RUN if [ "$WASM" = "true" ]; then \
 FROM golang:1.20.0 as tendermint-builder
 WORKDIR /app
 
-RUN git clone -b v0.37.9 --single-branch https://github.com/cometbft/cometbft.git && cd cometbft && make build
+RUN git clone -b v0.37.11 --single-branch https://github.com/cometbft/cometbft.git && cd cometbft && make build
 
 FROM debian:bullseye-slim AS runtime
 #ENV NAMADA_BASE_DIR=/.namada
