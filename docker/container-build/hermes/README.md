@@ -5,6 +5,7 @@ A simpler way to run a namada relayer.
 ## How to run
 
 1) docker build .
+2) add keys to the `keys` folder. The format should be `$chainid@key_name`. Use `.toml` extension if its a namada wallet, `.json` if its a cosmos-sdk wallet json or no extension if its just a seeed.
 2) docker run 
     ```
     docker run -it --rm \
