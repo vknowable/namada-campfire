@@ -1,1 +1,4 @@
 docker/config/local-namada/genesis/parameters.old
+docker/container-build/hermes/run.sh
+docker/container-build/hermes/keys/*
+!docker/container-build/hermes/keys/.keep

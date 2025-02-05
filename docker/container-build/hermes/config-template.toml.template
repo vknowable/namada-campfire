@@ -1,0 +1,79 @@
+[global]
+log_level = 'debug'
+
+[mode]
+
+[mode.clients]
+enabled = true
+refresh = true
+misbehaviour = false
+
+[mode.connections]
+enabled = false
+
+[mode.channels]
+enabled = false
+
+[mode.packets]
+enabled = true
+clear_interval = 30
+clear_on_start = true
+tx_confirmation = true
+
+[rest]
+enabled = true
+host = '0.0.0.0'
+port = 3000
+
+[telemetry]
+enabled = true
+host = '0.0.0.0'
+port = 3005
+
+[[chains]]
+id = '$namada_chain_id'
+type = 'Namada'
+rpc_addr = '$namada_rpc'
+grpc_addr = 'https://127.0.0.1:9090' # not used
+event_source = { mode = 'push', url = '$namada_ws/websocket', batch_delay = '500ms' }
+account_prefix = ''
+key_name = 'relayer-$namada_key_id'
+store_prefix = 'ibc'
+trusting_period = '$namada_trusting_period'
+gas_price = { price = 0.000001, denom = '$namada_denomination' }
+gas_multiplier = 1.3
+max_gas = 650000
+rpc_timeout = '60s'
+memo_prefix = '$namada_memo'
+
+[chains.packet_filter]
+policy = '$namada_policy'
+list = $namada_filter
+
+[[chains]]
+id = '$other_chain_id'
+type = 'CosmosSdk'
+rpc_addr = 'https://$other_rpc'
+grpc_addr = '$other_grpc'
+event_source = { mode = 'push', url = 'wss://$other_ws/websocket', batch_delay = '500ms' }
+rpc_timeout = '60s'
+trusted_node = true
+account_prefix = '$other_account_prefix'
+key_name = 'relayer-$other_key_id'
+store_prefix = 'ibc'
+default_gas = 5000000
+max_gas = 15000000
+gas_price = { price = 0.01, denom = '$other_denomination' }
+gas_multiplier = 2
+max_msg_num = 30
+max_tx_size = 800000
+clock_drift = '5s'
+max_block_time = '30s'
+trusting_period = '$other_trusting_period'
+ccv_consumer_chain = false
+sequential_batch_tx = false
+memo_prefix = '$other_memo'
+
+[chains.packet_filter]
+policy = '$other_policy'
+list = $other_filter
